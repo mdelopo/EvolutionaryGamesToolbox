@@ -17,25 +17,26 @@ strategy2 = funList{find(strcmp(strList,input(prompt,'s')))};
 
 flags = [false, false]; % Flags for defection by either player
 
-game = zeros(2, rounds);
+game = zeros(2, rounds); % Initialize the matrix for the game
 player = 1;
-for round = 1:rounds
+for round = 1:rounds % Play the game
     if player == 1 
         game(1, round) = strategy1(player, round, game, flags);
         if game(1, round) == 'D'
-            flags(1) = true;
+            flags(1) = true; % Make flag true if defection occured
         end
         player = 2;
     end
     if player == 2
         game(2, round) = strategy2(player, round, game, flags);
         if game(2, round) == 'D'
-            flags(2) = true;
+            flags(2) = true; % Make flag true if defection occured
         end
         player = 1;
     end
 end
 
+% Print the resulting decisions for both players for every round
 fprintf('%s: %s\n',char(strategy1), game(1,:));
 fprintf('%s: %s\n',char(strategy2), game(2,:));
 
@@ -56,5 +57,6 @@ for i = 1:rounds
     end
 end
 
+% Print the scores for the two players
 fprintf('%s: %d\n',char(strategy1), scores(1));
 fprintf('%s: %d\n',char(strategy2), scores(2));
