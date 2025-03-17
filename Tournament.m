@@ -1,5 +1,6 @@
 clear;
 clc;
+addpath('./strategies/');
 
 % Create a figure window
 f = figure('Position', [500 300 500 300], 'Name', 'Bimatrix Game Input', 'NumberTitle', 'off', 'UserData', []);
@@ -108,29 +109,5 @@ function confirmCallback(~, ~)
 
         % Resume execution and close GUI
         uiresume(f);
-    end
-end                                                                                                                                                                                                                                                                                             
-
-function decision = cooperate(player, round, game, flags)
-decision = 'C';
-end
-
-function decision = defect(player, round, game, flags)
-decision = 'D';
-end
-
-function decision = tit4tat(player, round, game, flags)
-if round == 1
-    decision = 'C';
-else
-    decision = game(3 - player, round - 1);
-end
-end
-
-function decision = grim(player, round, game, flags)
-    if flags(3 - player) == false
-        decision = 'C';
-    else
-        decision = 'D';
     end
 end
