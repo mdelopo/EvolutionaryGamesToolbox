@@ -23,7 +23,7 @@ game = zeros(2, rounds);
 player = 1;
 for round = 1:rounds
     if player == 1 
-        game(1, round) = player(1).strategy(player, round, game, flags);
+        game(1, round) = strategy1(player, round, game, flags);
         if game(1, round) == 'D'
             flags(1) = true;
         end
