@@ -4,7 +4,7 @@ addpath('./strategies/');
 
 guiUtils;
 
-strList= {'cooperate','defect','tit4tat','grim'};
+strList= {'All_C','All_D','TitForTat','Grim'};
 funList = cellfun(@str2func,strList,'uniformOutput',false);
 
 prompt = "How many rounds will the tournament be? ";
