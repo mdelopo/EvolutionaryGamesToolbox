@@ -9,9 +9,8 @@ function Scores = Axel(B, Strategies, Pop, T)
     
     for i = 1:N-1
         for j = i+1:N
-            match = zeros(2, T); 
+            game = zeros(2, T);
             matchpayoffs = zeros(2, 1);
-            flags = [false, false]; % Flags for defection
             
             % Determine strategy indices
             idx1 = find(i > PopCumsum(1:end-1) & i <= PopCumsum(2:end), 1, 'first');
@@ -25,30 +24,21 @@ function Scores = Axel(B, Strategies, Pop, T)
             strategy1 = funList{idx1}; 
             strategy2 = funList{idx2};
 
-            % Play the match
+            % Play the game
             for round = 1:T
-                move1 = strategy1(1, round, match, flags);
-                move2 = strategy2(2, round, match, flags);
-                match(1, round) = move1;
-                match(2, round) = move2;
-
-                if move1 == 2
-                    flags(1) = true;
-                end
-                if move2 == 2
-                    flags(2) = true;
-                end
+                game(1, round) = strategy1(game, 1);
+                game(2, round) = strategy2(game, 2);
             end
             
             % Calculate scores for the match
             for v = 1:T
-                if match(1, v) == 1 && match(2, v) == 1
+                if game(1, v) == 1 && game(2, v) == 1
                     matchpayoffs(1) = matchpayoffs(1) + B(1,1);
                     matchpayoffs(2) = matchpayoffs(2) + B(1,1);
-                elseif match(1, v) == 1 && match(2, v) == 2
+                elseif game(1, v) == 1 && game(2, v) == 2
                     matchpayoffs(1) = matchpayoffs(1) + B(1,2);
                     matchpayoffs(2) = matchpayoffs(2) + B(2,1);
-                elseif match(1, v) == 2 && match(2, v) == 1
+                elseif game(1, v) == 2 && game(2, v) == 1
                     matchpayoffs(1) = matchpayoffs(1) + B(2,1);
                     matchpayoffs(2) = matchpayoffs(2) + B(1,2);
                 else

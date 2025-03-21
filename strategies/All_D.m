@@ -1,3 +1,3 @@
-function decision = All_D(player, round, game, flags)
+function decision = All_D(game, player)
 decision = 2;
 end

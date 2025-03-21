@@ -1,7 +1,7 @@
-function decision = TitForTat(player, round, game, flags)
-if round == 1
+function decision = TitForTat(game, player)
+if  game(player,1)==0
     decision = 1;
 else
-    decision = game(3 - player, round - 1);
+    decision = game(3 - player, find(game(3-player,:),1,'last'));
 end
 end
