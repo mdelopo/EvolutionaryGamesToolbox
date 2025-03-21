@@ -1,7 +1,7 @@
 function decision = Grim(player, round, game, flags)
     if flags(3 - player) == false
-        decision = 'C';
+        decision = 1;
     else
-        decision = 'D';
+        decision = 2;
     end
 end

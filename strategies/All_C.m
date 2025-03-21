@@ -1,3 +1,3 @@
 function decision = All_C(player, round, game, flags)
-decision = 'C';
+decision = 1;
 end

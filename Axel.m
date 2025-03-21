@@ -32,23 +32,23 @@ function Scores = Axel(B, Strategies, Pop, T)
                 match(1, round) = move1;
                 match(2, round) = move2;
 
-                if move1 == 'D'
+                if move1 == 2
                     flags(1) = true;
                 end
-                if move2 == 'D'
+                if move2 == 2
                     flags(2) = true;
                 end
             end
             
             % Calculate scores for the match
             for v = 1:T
-                if match(1, v) == 'C' && match(2, v) == 'C'
+                if match(1, v) == 1 && match(2, v) == 1
                     matchpayoffs(1) = matchpayoffs(1) + B(1,1);
                     matchpayoffs(2) = matchpayoffs(2) + B(1,1);
-                elseif match(1, v) == 'C' && match(2, v) == 'D'
+                elseif match(1, v) == 1 && match(2, v) == 2
                     matchpayoffs(1) = matchpayoffs(1) + B(1,2);
                     matchpayoffs(2) = matchpayoffs(2) + B(2,1);
-                elseif match(1, v) == 'D' && match(2, v) == 'C'
+                elseif match(1, v) == 2 && match(2, v) == 1
                     matchpayoffs(1) = matchpayoffs(1) + B(2,1);
                     matchpayoffs(2) = matchpayoffs(2) + B(1,2);
                 else
