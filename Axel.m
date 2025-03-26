@@ -32,19 +32,8 @@ function Scores = Axel(B, Strategies, Pop, T)
             
             % Calculate scores for the match
             for v = 1:T
-                if game(1, v) == 1 && game(2, v) == 1
-                    matchpayoffs(1) = matchpayoffs(1) + B(1,1);
-                    matchpayoffs(2) = matchpayoffs(2) + B(1,1);
-                elseif game(1, v) == 1 && game(2, v) == 2
-                    matchpayoffs(1) = matchpayoffs(1) + B(1,2);
-                    matchpayoffs(2) = matchpayoffs(2) + B(2,1);
-                elseif game(1, v) == 2 && game(2, v) == 1
-                    matchpayoffs(1) = matchpayoffs(1) + B(2,1);
-                    matchpayoffs(2) = matchpayoffs(2) + B(1,2);
-                else
-                    matchpayoffs(1) = matchpayoffs(1) + B(2,2);
-                    matchpayoffs(2) = matchpayoffs(2) + B(2,2);
-                end
+                matchpayoffs(1) = matchpayoffs(1) + B(game(1, v) , game(2, v));
+                matchpayoffs(2) = matchpayoffs(2) + B(game(2 ,v) , game(1 ,v));
             end
 
             % Update total scores
