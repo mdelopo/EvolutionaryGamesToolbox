@@ -1,7 +1,7 @@
-function decision = Grim(game, player)
-    if any(game(3 - player,find(game(player,:),1,'last'))==2)
-        decision = 2;
+function Move = Grim(History)
+    if any(History(2,find(History(1,:),1,'last'))==2)
+        Move = 2;
     else
-        decision = 1;
+        Move = 1;
     end
 end

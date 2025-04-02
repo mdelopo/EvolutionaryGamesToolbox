@@ -1,7 +1,7 @@
-function decision = TitForTat(game, player)
-    if  game(player,1)==0
-        decision = 1;
+function Move = TitForTat(History)
+    if  History(1,1)==0
+        Move = 1;
     else
-        decision = game(3 - player, find(game(player,:),1,'last'));
+        Move = History(2, find(History(1,:),1,'last'));
     end
 end

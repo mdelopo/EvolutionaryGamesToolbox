@@ -1,3 +1,3 @@
-function decision = All_C(game, player)
-decision = 1;
+function Move = All_C(History)
+Move = 1;
 end
