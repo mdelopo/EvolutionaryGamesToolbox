@@ -9,7 +9,7 @@ function Scores = Axel(B, Strategies, Pop, T)
     
     for i = 1:N-1
         for j = i+1:N
-            History = zeros(2, T);
+            History = zeros(T, 2);
             matchpayoffs = zeros(2, 1);
             
             % Determine strategy indices
@@ -26,14 +26,14 @@ function Scores = Axel(B, Strategies, Pop, T)
 
             % Play the game
             for round = 1:T
-                History(1, round) = strategy1(History);
-                History(2, round) = strategy2(flip(History,1));
+                History(round, 1) = strategy1(History);
+                History(round, 2) = strategy2(flip(History,2));
             end
             
             % Calculate scores for the match
             for v = 1:T
-                matchpayoffs(1) = matchpayoffs(1) + B(History(1, v) , History(2, v));
-                matchpayoffs(2) = matchpayoffs(2) + B(History(2 ,v) , History(1 ,v));
+                matchpayoffs(1) = matchpayoffs(1) + B(History(v, 1) , History(v, 2));
+                matchpayoffs(2) = matchpayoffs(2) + B(History(v, 2) , History(v, 1));
             end
 
             % Update total scores
