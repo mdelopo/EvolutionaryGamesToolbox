@@ -1,6 +1,6 @@
 function Move = SneakyTitForTat(History)
-% A player starts by cooperating, then defects once and repents if punished and plays TitForTat, but continues if
-% not punished
+% A player starts by cooperating, then defects once and repents if punished and plays TitForTat, 
+% but continues if not punished
     if  History(1,1)==0
         Move = 1;
     elseif sum(History(1:find(History(:, 1),1,'last'), 2)==2) == 0
