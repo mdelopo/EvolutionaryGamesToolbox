@@ -3,7 +3,7 @@ function Move = APavlov(History)
 % classify the opponent as one of 4 strategies: All_C, All_D, SneakyTFT and
 % Random. Plays accordingly to either achieve cooperation or defect against
 % uncooperative opponents.
-round = find(History(:, 1),1,'last') +1;
+round = nnz(History(:,1)) +1;
 if round <= 6
     Move = TitForTat(History);
 elseif isequal(History(1:6,2), [1, 1, 1, 1, 1, 1])
