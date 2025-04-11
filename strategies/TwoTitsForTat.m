@@ -1,40 +1,26 @@
 function Move = TwoTitsForTat(History)
-% Starts by cooperating and replies to each defect by two defections
-     numRounds = size(History, 1);
-    %First Move: Always Cooperate
-    if numRounds == 0 || History(1,1) == 0 
+    
+    persistent punishment
+
+    if isempty(punishment)
+        punishment = 0; %tracks how many times we need to defect
+    end
+   
+    % First move: cooperate
+    if History(1,1) == 0
         Move = 1;
         return;
     end
-    
-    punishRounds = 0;
-    i = 1;
-    %Loop Through History to Check for Unpunished Defections
-    while i <= numRounds
-        if History(i,2) == 0
-            for j = 1:2
-                if i + j <= numRounds
-                    if History(i + j, 1) == 0
-                        continue; % We already punished in this round
-                    end
-                else
-                    % Future punishment still pending
-                    punishRounds = 1;
-                    break;
-                end
-            end
-        end
-        if punishRounds == 1
-            break;
-        end
-        i = i + 1;
+
+    % Check if opponent defected last round
+    if History(find(History(:,1), 1, 'last'), 2) == 2  % opponent defected
+        punishment = punishment + 2;
     end
 
-    if punishRounds == 1
-        Move = 0; % Still need to punish
+    if punishment > 0
+        Move = 2; % defect
+        punishment = punishment - 1;
     else
-        Move = 1; % Otherwise, cooperate
+        Move = 1; % cooperate
     end
 end
-      
-
