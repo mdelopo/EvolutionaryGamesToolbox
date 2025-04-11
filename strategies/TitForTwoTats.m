@@ -3,7 +3,7 @@ function Move = TitForTwoTats(History)
     round = nnz(History(:,1)) +1;
     if  round < 3
         Move = 1;
-    elseif isequal(History(round - 2: round - 1, 2), [2 2]) 
+    elseif isequal(History(round - 2: round - 1, 2), [2; 2]) 
         Move = 2;
     else
         Move = 1;

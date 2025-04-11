@@ -5,7 +5,7 @@ function Move = Prober(History)
     round = nnz(History(:,1)) +1;
     if round <= length(startingMoves)
         Move = startingMoves(round);
-    elseif History(2, 2) == 1 && History(2, 3) == 1
+    elseif History(2, 2) == 1 && History(3, 2) == 1
         Move=All_D(History); 
     else
         Move=TitForTat(History);

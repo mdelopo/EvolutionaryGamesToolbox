@@ -6,7 +6,7 @@ function Move = APavlov(History)
 round = nnz(History(:,1)) +1;
 if round <= 6
     Move = TitForTat(History);
-elseif isequal(History(1:6,2), [1, 1, 1, 1, 1, 1])
+elseif isequal(History(1:6,2), [1, 1, 1, 1, 1, 1]')
     Move = TitForTat(History); % Play as TFT, assume opponent is Cooperative
 elseif sum(History(1:6,2) == 2) == 3
     Move = TitForTwoTats(History); % Assume opponent is SneakyTFT, play accordingly
