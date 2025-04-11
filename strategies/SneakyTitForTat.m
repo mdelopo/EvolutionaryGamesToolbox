@@ -3,6 +3,8 @@ function Move = SneakyTitForTat(History)
 % but continues if not punished
     if  History(1,1)==0
         Move = 1;
+    elseif History(2,1)==0
+        Move = TitForTat(History);
     elseif sum(History(1:find(History(:, 1),1,'last'), 2)==2) == 0
         Move = All_D(History);
     elseif History(find(History(:,1),1,'last'), 2) == 2 && History(find(History(:,1),1,'last') - 1, 1) == 2
