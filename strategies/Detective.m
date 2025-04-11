@@ -1,6 +1,6 @@
 function Move = Detective(History)
-% Starts with C, D, C, C, or with the given sequence of moves. If the opponent defects at
-% least once in the first fixed rounds, play as TFT forever, else defect forever.
+% Starts with C, D, C, C. If the opponent defects at least once in the first fixed rounds,
+% play as TFT forever, else defect forever.
 startingMoves = [1 2 1 1];
 round = find(History(:, 1),1,'last') +1;
 if round <= length(startingMoves)
