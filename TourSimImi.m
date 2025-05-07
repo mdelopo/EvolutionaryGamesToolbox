@@ -1,4 +1,4 @@
-function [POP, BST] = TourSimImi(B, Strategies, POP0, K, T, J)
+function [POP, BST] = TourSimImi(B, Strategies, POP0, K, T, J, mode)
 % TourSimImi - Simulates the Imitation Dynamics Tournament for J generations
 %
 % Inputs:
@@ -14,6 +14,22 @@ function [POP, BST] = TourSimImi(B, Strategies, POP0, K, T, J)
 %   BST - Matrix indicating which strategies were best in each generation (J x numStrategies)
 %         1 = best strategy, 0 = not best
 
+arguments
+    B
+    Strategies
+    POP0
+    K
+    T
+    J
+    mode = "Individual";
+end
+
+if mode~="Individual" && mode~="Total"
+    disp("Wrong mode for best strategy calculation");
+    POP = [];
+    BST = [];
+    return
+end
 addpath('./strategies/');
 
 % Number of strategies
@@ -30,20 +46,22 @@ POP(1, :) = POP0;
 for gen = 1:J
     % Get current population distribution
     currentPop = POP(gen, :);
-    
-    % Calculate payoffs for each strategy
-    payoffs = calculatePayoffs(B, Strategies, currentPop, T);
-    
-    % Find the best strategies (those with maximum payoff)
-    maxPayoff = max(payoffs);
-    bestStrategyIndices = find(payoffs == maxPayoff);
-    
+
+    % Calculate payoffs for each strategy and find the best strategies
+    % (those with maximum payoff) depending on mode selected
+    if mode == "Individual"
+        bestStrategyIndices = calculateBestStrategiesFromIndividuals(B, Strategies, currentPop, T);
+    else
+        payoffs = calculatePayoffs(B, Strategies, currentPop, T);
+        maxPayoff = max(payoffs);
+        bestStrategyIndices = find(payoffs == maxPayoff);
+    end
     % Record best strategies for this generation
     BST(gen, bestStrategyIndices) = 1;
-    
+
     % Calculate the population for the next generation
     nextPop = updatePopulation(currentPop, payoffs, K, numStrategies);
-    
+
     % Store the new population
     POP(gen+1, :) = nextPop;
 end
@@ -67,22 +85,22 @@ for i = 1:numStrategies
     if state(i) == 0
         continue;  % Skip strategies with no population
     end
-    
+
     strategyPayoff = 0;
-    
+
     % Play against each strategy (including itself)
     for j = 1:numStrategies
         if state(j) == 0
             continue;  % Skip strategies with no population
         end
-        
+
         % Calculate payoff when strategy i plays against strategy j
         strategy1 = str2func(Strategies{i});
         strategy2 = str2func(Strategies{j});
-        
+
         % Simulate T rounds of play
         singleMatchPayoff = simulatePlay(B, strategy1, strategy2, T);
-        
+
         % Calculate total payoff from all matches against this strategy
         % For matches against the same strategy, we need to account for not playing against oneself
         if i == j
@@ -95,7 +113,7 @@ for i = 1:numStrategies
             strategyPayoff = strategyPayoff + singleMatchPayoff * numMatches;
         end
     end
-    
+
     payoffs(i) = strategyPayoff;
 end
 
@@ -162,22 +180,22 @@ end
 if ~isempty(agentPool)
     % Randomly shuffle the agent pool
     agentPool = agentPool(randperm(length(agentPool)));
-    
+
     % Select the first actualK agents
     selectedAgents = agentPool(1:actualK);
-    
+
     % Count how many of each strategy were selected
     selectedCounts = zeros(1, numStrategies);
     for i = selectedAgents
         selectedCounts(i) = selectedCounts(i) + 1;
     end
-    
+
     % For each selected agent, randomly choose which best strategy to imitate
     for i = nonBestStrategyIndices
         if selectedCounts(i) > 0
             % Reduce this strategy's population
             nextPop(i) = nextPop(i) - selectedCounts(i);
-            
+
             % Distribute imitators among best strategies randomly
             for j = 1:selectedCounts(i)
                 % Randomly choose a best strategy
@@ -187,5 +205,44 @@ if ~isempty(agentPool)
         end
     end
 end
+end
+
+function bestStrategies = calculateBestStrategiesFromIndividuals(B, Strategies, state, T)
+% Determines best strategies by finding the highest individual payoff
+
+numStrategies = length(Strategies);
+population = sum(state);
+individualPayoffs = zeros(1, population);
+individualStrategies = zeros(1, population);
+
+% Create a list of all individuals and their strategies
+ind = 1;
+for s = 1:numStrategies
+    for count = 1:state(s)
+        individualStrategies(ind) = s;
+        ind = ind + 1;
+    end
+end
+
+% Assign strategy function handles
+strategyFuncs = cellfun(@str2func, Strategies, 'UniformOutput', false);
+
+% Simulate matches between all pairs
+for i = 1:population
+    for j = 1:population
+        if i == j
+            continue;
+        end
+        stratI = strategyFuncs{individualStrategies(i)};
+        stratJ = strategyFuncs{individualStrategies(j)};
+        payoff = simulatePlay(B, stratI, stratJ, T);
+        individualPayoffs(i) = individualPayoffs(i) + payoff;
+    end
+end
+
+% Find the maximum individual payoff
+maxPayoff = max(individualPayoffs);
+bestIndividuals = find(individualPayoffs == maxPayoff);
+bestStrategies = unique(individualStrategies(bestIndividuals));
 
 end

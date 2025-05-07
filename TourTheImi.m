@@ -1,6 +1,23 @@
-function P = TourTheImi(B, Strategies, POP0, K, T, J)
+function P = TourTheImi(B, Strategies, POP0, K, T, J, mode)
 % TourTheImi - Constructs the transition matrix for imitation dynamics
 % Each state is a valid population distribution summing to N
+
+arguments
+    B
+    Strategies
+    POP0
+    K
+    T
+    J
+    mode = "Individual";
+end
+
+if mode~="Individual" && mode~="Total"
+    disp("Wrong mode for best strategy calculation");
+    POP = [];
+    BST = [];
+    return
+end
 
 addpath('./strategies/');
 S = length(Strategies);         % Number of strategies
@@ -25,13 +42,18 @@ end
 % Loop over all possible states
 for s = 1:numStates
     currPop = allStates(s, :);
-    payoffs = calculatePayoffs(B, Strategies, currPop, T);
 
-    maxPayoff = max(payoffs);
-    bestStrats = find(payoffs == maxPayoff);
+    % Find best Strategies depending on mode
+    if mode == "Individual"
+        bestStrats = calculateBestStrategiesFromIndividuals(B, Strategies, currPop, T);
+    else
+        payoffs = calculatePayoffs(B, Strategies, currPop, T);
+        maxPayoff = max(payoffs);
+        bestStrats = find(payoffs == maxPayoff);
+    end
     nonBestStrats = setdiff(1:S, bestStrats);
     totalNonBest = sum(currPop(nonBestStrats));
-    
+
     % If no imitation possible, self-transition
     if totalNonBest == 0 || K == 0
         P(s, s) = 1;
@@ -97,22 +119,22 @@ for i = 1:numStrategies
     if state(i) == 0
         continue;  % Skip strategies with no population
     end
-    
+
     strategyPayoff = 0;
-    
+
     % Play against each strategy (including itself)
     for j = 1:numStrategies
         if state(j) == 0
             continue;  % Skip strategies with no population
         end
-        
+
         % Calculate payoff when strategy i plays against strategy j
         strategy1 = str2func(Strategies{i});
         strategy2 = str2func(Strategies{j});
-        
+
         % Simulate T rounds of play
         singleMatchPayoff = simulatePlay(B, strategy1, strategy2, T);
-        
+
         % Calculate total payoff from all matches against this strategy
         % For matches against the same strategy, we need to account for not playing against oneself
         if i == j
@@ -125,7 +147,7 @@ for i = 1:numStrategies
             strategyPayoff = strategyPayoff + singleMatchPayoff * numMatches;
         end
     end
-    
+
     payoffs(i) = strategyPayoff;
 end
 
@@ -162,4 +184,44 @@ else
         states = [states; [i * ones(size(subStates,1),1), subStates]];
     end
 end
+end
+
+function bestStrategies = calculateBestStrategiesFromIndividuals(B, Strategies, state, T)
+% Determines best strategies by finding the highest individual payoff
+
+numStrategies = length(Strategies);
+population = sum(state);
+individualPayoffs = zeros(1, population);
+individualStrategies = zeros(1, population);
+
+% Create a list of all individuals and their strategies
+ind = 1;
+for s = 1:numStrategies
+    for count = 1:state(s)
+        individualStrategies(ind) = s;
+        ind = ind + 1;
+    end
+end
+
+% Assign strategy function handles
+strategyFuncs = cellfun(@str2func, Strategies, 'UniformOutput', false);
+
+% Simulate matches between all pairs
+for i = 1:population
+    for j = 1:population
+        if i == j
+            continue;
+        end
+        stratI = strategyFuncs{individualStrategies(i)};
+        stratJ = strategyFuncs{individualStrategies(j)};
+        payoff = simulatePlay(B, stratI, stratJ, T);
+        individualPayoffs(i) = individualPayoffs(i) + payoff;
+    end
+end
+
+% Find the maximum individual payoff
+maxPayoff = max(individualPayoffs);
+bestIndividuals = find(individualPayoffs == maxPayoff);
+bestStrategies = unique(individualStrategies(bestIndividuals));
+
 end
