@@ -1,122 +1,93 @@
 function P = TourTheImi(B, Strategies, POP0, K, T, J)
-% TourTheImi - Calculates the transition matrix for imitation dynamics
-% in an iterated prisoner's dilemma
-%
-% Inputs:
-%   B - 2x2 payoff matrix for the prisoner's dilemma
-%   Strategies - Cell array of strings with strategy names (e.g. {'All_C', 'All_D', 'TitForTat'})
-%   POP0 - Initial population distribution (vector with number of agents using each strategy)
-%   K - Number of people that imitate the best strategy after each generation
-%   T - Number of rounds played for each match in the tournament
-%   J - Number of generations for the simulation
-%
-% Output:
-%   P - Transition matrix of the Markov chain
+% TourTheImi - Constructs the transition matrix for imitation dynamics
+% Each state is a valid population distribution summing to N
 
-% Convert string array to cell array if necessary
-if isstring(Strategies)
-    Strategies = cellstr(Strategies);
-end
+addpath('./strategies/');
+S = length(Strategies);         % Number of strategies
+N = sum(POP0);                  % Total number of agents
 
-% Ensure POP0 is a column vector
-POP0 = POP0(:);
-
-% Number of strategies
-numStrategies = length(Strategies);
-
-% Total population size
-N = sum(POP0);
-
-% Generate all possible population distributions (states of the Markov chain)
-states = generateStates(N, numStrategies);
-numStates = size(states, 1);
+% Enumerate all states: integer partitions of N into S bins
+allStates = generateStates(N, S);
+numStates = size(allStates, 1);
 
 % Initialize transition matrix
 P = zeros(numStates, numStates);
 
-% Find the index of the initial state
-initialStateIdx = findStateIndex(POP0', states);
+% Precompute strategy function handles
+strategyFuncs = cellfun(@str2func, Strategies, 'UniformOutput', false);
 
-% For each possible state
+% Map from population to index
+stateMap = containers.Map;
 for i = 1:numStates
-    currentState = states(i, :);
+    stateMap(mat2str(allStates(i, :))) = i;
+end
+
+% Loop over all possible states
+for s = 1:numStates
+    currPop = allStates(s, :);
+    payoffs = calculatePayoffs(B, Strategies, currPop, T);
+
+    maxPayoff = max(payoffs);
+    bestStrats = find(payoffs == maxPayoff);
+    nonBestStrats = setdiff(1:S, bestStrats);
+    totalNonBest = sum(currPop(nonBestStrats));
     
-    % Skip states with zero population for any strategy that has agents in POP0
-    % This is to ensure we only consider states reachable from the initial state
-    if ~isStateReachable(currentState, POP0')
+    % If no imitation possible, self-transition
+    if totalNonBest == 0 || K == 0
+        P(s, s) = 1;
         continue;
     end
-    
-    % Calculate expected payoffs for each strategy in the current state
-    payoffs = calculatePayoffs(B, Strategies, currentState, T);
-    
-    % Calculate the transition probabilities to other states based on imitation dynamics
-    transitions = calculateTransitions(currentState, payoffs, K, numStrategies);
-    
-    % Update the transition matrix
-    for j = 1:size(transitions, 1)
-        nextState = transitions(j, 1:numStrategies);
-        probability = transitions(j, numStrategies+1);
-        
-        % Find the index of the next state
-        nextStateIdx = findStateIndex(nextState, states);
-        
-        % Update the transition matrix
-        P(i, nextStateIdx) = probability;
+
+    actualK = min(K, totalNonBest);
+
+    % Generate all possible reassignment combinations
+    % Who switches and to which best strategy (uniformly random)
+    transitionCounts = containers.Map;
+
+    % Enumerate possible ways to choose actualK agents from non-best strategies
+    agentPool = [];
+    for i = nonBestStrats
+        agentPool = [agentPool, repmat(i, 1, currPop(i))];
+    end
+
+    combos = nchoosek(1:length(agentPool), actualK);
+    for c = 1:size(combos,1)
+        selected = agentPool(combos(c,:));
+        nextPop = currPop;
+
+        for idx = 1:length(selected)
+            from = selected(idx);
+            to = bestStrats(randi(length(bestStrats)));
+            nextPop(from) = nextPop(from) - 1;
+            nextPop(to) = nextPop(to) + 1;
+        end
+
+        key = mat2str(nextPop);
+        if isKey(transitionCounts, key)
+            transitionCounts(key) = transitionCounts(key) + 1;
+        else
+            transitionCounts(key) = 1;
+        end
+    end
+
+    % Normalize and update P
+    keysList = keys(transitionCounts);
+    for k = 1:length(keysList)
+        targetState = str2num(keysList{k}); %#ok<ST2NM>
+        j = stateMap(mat2str(targetState));
+        P(s, j) = transitionCounts(keysList{k}) / size(combos,1);
     end
 end
-
-end
-
-function states = generateStates(N, numStrategies)
-% Generate all possible population distributions for N people and numStrategies strategies
-
-if numStrategies == 1
-    states = N;
-    return;
-end
-
-states = [];
-for i = 0:N
-    subStates = generateStates(N-i, numStrategies-1);
-    newStates = [i*ones(size(subStates, 1), 1), subStates];
-    states = [states; newStates];
-end
-
-end
-
-function idx = findStateIndex(state, states)
-% Find the index of a specific state in the list of all states
-
-idx = find(all(states == state, 2));
-if isempty(idx)
-    error('State not found in the list of states');
-end
-
-end
-
-function reachable = isStateReachable(currentState, initialState)
-% Check if a state is reachable from the initial state
-% A state is reachable if it doesn't have agents for strategies that had zero agents initially
-
-reachable = true;
-for i = 1:length(initialState)
-    if initialState(i) == 0 && currentState(i) > 0
-        reachable = false;
-        break;
-    end
-end
-
 end
 
 function payoffs = calculatePayoffs(B, Strategies, state, T)
-% Calculate the average payoff for each strategy in the current state
+% Calculate the total payoff for each strategy in the current state
 
 numStrategies = length(Strategies);
 payoffs = zeros(1, numStrategies);
 totalPopulation = sum(state);
 
-% If there's only one individual, all payoffs remain 0
+% If there's only one individual, payoff is 0 (no one to play with)
 if totalPopulation <= 1
     return;
 end
@@ -124,13 +95,10 @@ end
 % Calculate payoffs for each strategy
 for i = 1:numStrategies
     if state(i) == 0
-        % Set payoff to NaN for strategies with no population
-        payoffs(i) = NaN;
-        continue;
+        continue;  % Skip strategies with no population
     end
     
-    totalStrategyPayoff = 0;
-    totalMatches = 0;
+    strategyPayoff = 0;
     
     % Play against each strategy (including itself)
     for j = 1:numStrategies
@@ -138,7 +106,7 @@ for i = 1:numStrategies
             continue;  % Skip strategies with no population
         end
         
-        % Get the strategy functions
+        % Calculate payoff when strategy i plays against strategy j
         strategy1 = str2func(Strategies{i});
         strategy2 = str2func(Strategies{j});
         
@@ -146,137 +114,52 @@ for i = 1:numStrategies
         singleMatchPayoff = simulatePlay(B, strategy1, strategy2, T);
         
         % Calculate total payoff from all matches against this strategy
-        if i == j && state(i) > 1
-            % When playing against the same strategy type, don't play against yourself
-            numMatches = state(i) * (state(j) - 1) / 2;  % Divide by 2 to avoid double counting
-            totalStrategyPayoff = totalStrategyPayoff + (singleMatchPayoff * numMatches);
-            totalMatches = totalMatches + numMatches;
-        elseif i ~= j
+        % For matches against the same strategy, we need to account for not playing against oneself
+        if i == j
+            if state(j) > 1  % More than one agent using this strategy
+                numMatches = state(i) * (state(j) - 1);
+                strategyPayoff = strategyPayoff + singleMatchPayoff * numMatches;
+            end
+        else
             numMatches = state(i) * state(j);
-            totalStrategyPayoff = totalStrategyPayoff + (singleMatchPayoff * numMatches);
-            totalMatches = totalMatches + numMatches;
+            strategyPayoff = strategyPayoff + singleMatchPayoff * numMatches;
         end
     end
     
-    % Calculate average payoff per match
-    if totalMatches > 0
-        payoffs(i) = totalStrategyPayoff / totalMatches;
-    else
-        payoffs(i) = 0;  % No matches played
-    end
+    payoffs(i) = strategyPayoff;
 end
 
 end
 
 function payoff = simulatePlay(B, strategy1, strategy2, T)
-% Simulate T rounds of play between two strategies and return the total payoff for the first strategy
+% Simulate T rounds of play between two strategies and return the total payoff for strategy I
 
-% Initialize history (only keeping track of as many rounds as needed by strategies)
-History = zeros(T, 2);
+% Initialize history as a Tx2 array
+History = zeros(T, 2);  % Empty initial history
+
 totalPayoff = 0;
 
-% Play T rounds
 for round = 1:T
+    % Get moves
     History(round, 1) = strategy1(History);
     History(round, 2) = strategy2(flip(History,2));
-    
-    % Calculate payoff for player 1
+    % Calculate payoff for player I
     totalPayoff = totalPayoff + B(History(round, 1), History(round, 2));
 end
 
-payoff = totalPayoff;
+payoff = totalPayoff;  % Return total payoff, not average
 
 end
 
-function transitions = calculateTransitions(state, payoffs, K, numStrategies)
-% Calculate the transition probabilities based on imitation dynamics
-
-% Handle NaN values in payoffs (for strategies with no population)
-payoffs(isnan(payoffs)) = -Inf;  % Ensure strategies with no agents aren't considered "best"
-
-% Find best-performing strategies
-maxPayoff = max(payoffs);
-bestStrategyIndices = find(payoffs == maxPayoff);
-numBestStrategies = length(bestStrategyIndices);
-
-% If all strategies have the same payoff, no transitions occur
-if all(ismember(find(state > 0), bestStrategyIndices))
-    transitions = [state, 1];  % Stay in current state with probability 1
-    return;
-end
-
-% Calculate total population of non-best strategies
-nonBestStrategyIndices = setdiff(find(state > 0), bestStrategyIndices);
-nonBestPopulation = sum(state(nonBestStrategyIndices));
-
-% If there are no non-best strategies with population, no transitions occur
-if nonBestPopulation == 0
-    transitions = [state, 1];  % Stay in current state with probability 1
-    return;
-end
-
-% Adjust K if there aren't enough non-best agents to select K imitators
-actualK = min(K, nonBestPopulation);
-
-% Initialize matrix to store possible transitions
-possibleTransitions = [];
-
-% Calculate hypergeometric probabilities for each possible distribution of imitators
-for i = nonBestStrategyIndices
-    % Maximum number of agents that can switch from strategy i
-    maxSwitchers = min(state(i), actualK);
-    
-    for numSwitchers = 0:maxSwitchers
-        % Probability of selecting exactly numSwitchers from strategy i
-        probSelecting = hygepdf(numSwitchers, nonBestPopulation, state(i), actualK);
-        
-        % For each best strategy they could imitate
-        for b = 1:numBestStrategies
-            bestStratIdx = bestStrategyIndices(b);
-            
-            % Create new state after imitation
-            newState = state;
-            newState(i) = newState(i) - numSwitchers;
-            newState(bestStratIdx) = newState(bestStratIdx) + numSwitchers;
-            
-            % Calculate transition probability (equal chance to choose any best strategy)
-            probability = probSelecting / numBestStrategies;
-            
-            % Add this transition
-            possibleTransitions = [possibleTransitions; [newState, probability]];
-        end
-    end
-end
-
-% Combine identical transitions by summing probabilities
-if ~isempty(possibleTransitions)
-    [uniqueStates, ~, ic] = unique(possibleTransitions(:, 1:numStrategies), 'rows');
-    transitions = zeros(size(uniqueStates, 1), numStrategies + 1);
-    
-    for i = 1:size(uniqueStates, 1)
-        idx = (ic == i);
-        transitions(i, :) = [uniqueStates(i, :), sum(possibleTransitions(idx, numStrategies+1))];
-    end
+function states = generateStates(N, S)
+% Generate all integer compositions of N into S parts
+if S == 1
+    states = N;
 else
-    % If no transitions were calculated, stay in the same state
-    transitions = [state, 1];
+    states = [];
+    for i = 0:N
+        subStates = generateStates(N - i, S - 1);
+        states = [states; [i * ones(size(subStates,1),1), subStates]];
+    end
 end
-
 end
-
-%function p = hygepdf(x, M, K, n)
-% Hypergeometric probability density function
-% x: number of successes (items selected from the success group)
-% M: population size (total number of items)
-% K: number of success states in the population
-% n: number of samples drawn
-%
-% Returns the probability of getting exactly x successes
-
-%if x < 0 || x > K || x > n || n > M
-%    p = 0;
-%    return;
-%end
-
-%p = nchoosek(K, x) * nchoosek(M-K, n-x) / nchoosek(M, n);
-%end
