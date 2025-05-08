@@ -1,0 +1,105 @@
+\documentclass[12pt]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\graphicspath{{../matlab/figures/}}
+\usepackage{hyperref} % Add hyperref package for clickable links
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
+
+
+% Set the page margins
+\geometry{margin=2.54cm}
+
+%\usepackage{kmath,kerkis} % The order of the packages matters; kmath changes the default text font
+%\usepackage[T1]{fontenc}
+
+% Set the font to Kerkis
+\setmainfont{Kerkis}
+
+\usepackage{matlab-prettifier}
+\newfontfamily\greekfonttt[Script=Greek]{Kerkis}
+
+% Define colors
+\definecolor{myblue}{RGB}{0, 51, 102}
+\definecolor{mygray}{RGB}{150,150,150}
+\definecolor{mybg}{RGB}{230,230,230}
+
+% Set section title formatting
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{myblue}}
+  {\thesection}{1em}{}
+%\titleformat{\subsection}
+%  {\normalfont\Large\bfseries\color{myblue}}
+%  {\thesubsection}{1em}{}
+
+\setmainlanguage{greek}
+\setotherlanguage{english}
+
+% Define header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Ομάδα 2}
+\rhead{Υλοποίηση εξελικτικού πρωταθλήματος Axelrod}
+\rfoot{\thepage}
+
+%\title{Αναφορά εργαστηρίου}
+%\author{Όνομα Φοιτητή}
+%\date{\today}
+
+\begin{document}
+\begin{titlepage}
+\newgeometry{margin=2cm, tmargin=3cm, bmargin=3cm}
+\centering
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{banner-horizontal-black300ppi.png}\par % Image on top of title
+\end{figure}
+%\textcolor{black}{\large \bfseries Αριστοτέλειο Πανεπιστήμιο Θεσσαλονίκης\\}\par
+\vspace{18pt}
+\textcolor{black}{\Large \bfseries Τμήμα Ηλεκτρολόγων Μηχανικών\\και Μηχανικών Υπολογιστών\\}\par
+\vspace{1cm}
+\vfill
+\textcolor{black}{\Large \bfseries Θεωρία Παιγνίων}\par
+\vspace{12pt}
+\textcolor{black}{\large \bfseries Υλοποίηση εξελικτικού πρωταθλήματος Axelrod}\par
+
+\vspace{0.5cm} % Adjust vertical spacing here
+\vfill
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}%
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+{\large
+\def\arraystretch{1.3}
+\begin{tabularx}{\textwidth}{ R|L }
+\textbf{Ομάδα}                			 & 2           \\
+\textbf{Βαπόρης Δημήτριος}      & ΑΕΜ 10625 \\
+\textbf{Βουλκίδης Βλάσιος}        & ΑΕΜ 10627 \\
+\textbf{Ντελόπουλος Εμμανουήλ}      & ΑΕΜ 10693 \\
+\textbf{Υπεύθυνος Καθηγητής}           & Κεχαγιάς Αθανάσιος\\
+\end{tabularx}
+}
+\vspace{0.5cm}
+\vfill
+\textcolor{black}{\large \bfseries Εαρινό Εξάμηνο 2025}\par
+\end{titlepage}
+\restoregeometry
+
+\tableofcontents % Table of Contents
+
+\newpage
+\section{Εισαγωγή}
+
+
+\newpage
+\listoffigures\addcontentsline{toc}{section}{Κατάλογος σχημάτων}
+\end{document}
