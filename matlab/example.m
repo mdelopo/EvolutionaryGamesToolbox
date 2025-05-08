@@ -1,7 +1,7 @@
 B = [3 1; 4 2];
 T = 10;
-Strategies = ["All_D", "All_C", "Grim", "TitForTat", "Alternator", "SneakyTitForTat", "SpitefulTitForTat", "TwoTitsForTat", "Prober", "Detective", "TitForTwoTats","Cycler", "soft_majo", "per_ddc", "per_ccd"];
-Pop = [10 10 10 10 10 10 10 10 10 10 10 10 10 10 10];
+Strategies = ["All_D", "All_C", "Grim", "TitForTat", "Alternator", "SneakyTitForTat", "SpitefulTitForTat", "TwoTitsForTat", "Prober", "Detective", "TitForTwoTats","Cycler", "soft_majo", "per_ddc", "per_ccd", "per_ccccd"];
+Pop = [10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10];
 scores = Axel(B, Strategies, Pop, T)
 %% First Example: Showcase Usage of TourSimFit
 clear; clc;
@@ -10,7 +10,7 @@ Strategies = ["All_D", "All_C", "TitForTat"];
 POP0 = [100; 100; 100];
 T = 100;
 J = 100;
-[POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
+[POP, BST, FIT] = TourSimFit(B, Strategies, POP0, T, J);
 % Plot Population of Strategies Over Generations
 fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"First Example: Showcase Usage of TourSimFit");
 %% 
@@ -18,17 +18,17 @@ clear; clc;
 B = [3 0; 5 1];
 Strategies = ["per_ddc", "Alternator", "soft_majo"];
 POP0 = [100; 100; 100];
-T = 100;
+T = 1000;
 J = 90;
 [POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
 % Plot Population of Strategies Over Generations
-fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Unnamed exmple");
+fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Unnamed example");
 %% 1st case: Monotonous Convergence
 clear; clc;
 B = [3 0; 5 1];
 Strategies = ["Grim", "TitForTat", "Alternator"];
 POP0 = [100; 100; 100];
-T = 100;
+T = 1000;
 J = 10;
 [POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
 % Plot Population of Strategies Over Generations
@@ -39,11 +39,41 @@ clear; clc;
 B = [3 0; 5 1];
 Strategies = ["per_ccd", "per_ddc", "soft_majo"];
 POP0 = [450; 1000; 100];
-T = 100;
+T = 1000;
 J = 420;
 [POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
 % Plot Population of Strategies Over Generations
 fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Attenuated oscillatory movements");
+%% 3rd case: Periodic movements
+clear; clc;
+B = [3 0; 5 1];
+Strategies = ["per_ccd", "per_ddc", "soft_majo"];
+POP0 = [300; 200; 100];
+T = 1000;
+J = 1000;
+[POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
+% Plot Population of Strategies Over Generations
+fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Periodic movements");
+%% 4th case: Increasing oscillations
+clear; clc;
+B = [3 0; 5 1];
+Strategies = ["per_ccd", "per_ddc", "soft_majo"];
+POP0 = [300; 400; 200];
+T = 1000;
+J = 450;
+[POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
+% Plot Population of Strategies Over Generations
+fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Increasing oscillations");
+%% 5th case: Disordered oscillations
+clear; clc;
+B = [3 0; 5 1];
+Strategies = ["soft_majo", "per_ccccd", "Prober"];
+POP0 = [100; 500; 800];
+T = 1000;
+J = 280;
+[POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
+% Plot Population of Strategies Over Generations
+fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Disordered oscillations");
 %% Example showcase of TourTheImi and AnalyzeMarkovChain
 clear; clc;
 B = [3 1; 4 2];
