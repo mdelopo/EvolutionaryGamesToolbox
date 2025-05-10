@@ -13,7 +13,7 @@ J = 100;
 [POP, BST, FIT] = TourSimFit(B, Strategies, POP0, T, J);
 % Plot Population of Strategies Over Generations
 fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"First Example: Showcase Usage of TourSimFit");
-%% 
+%% Defectors may be strong
 clear; clc;
 B = [3 0; 5 1];
 Strategies = ["per_ddc", "Alternator", "soft_majo"];
@@ -22,7 +22,7 @@ T = 1000;
 J = 90;
 [POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
 % Plot Population of Strategies Over Generations
-fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Unnamed example");
+fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Defectors may be strong");
 %% 1st case: Monotonous Convergence
 clear; clc;
 B = [3 0; 5 1];
@@ -56,11 +56,21 @@ J = 1000;
 fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Periodic movements");
 %% 4th case: Increasing oscillations
 clear; clc;
-B = [3 0; 5 1];
+B = [3 0; 4.72 1];
 Strategies = ["per_ccd", "per_ddc", "soft_majo"];
 POP0 = [300; 400; 200];
 T = 1000;
 J = 450;
+[POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
+% Plot Population of Strategies Over Generations
+fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Increasing oscillations");
+%% 4th case: Sensitivity to CIPD payoff
+clear; clc;
+B = [3 0; 4.6 1];
+Strategies = ["per_ccd", "per_ddc", "soft_majo"];
+POP0 = [300; 244; 100];
+T = 1000;
+J = 500;
 [POP, BST] = TourSimFit(B, Strategies, POP0, T, J);
 % Plot Population of Strategies Over Generations
 fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP,"Increasing oscillations");
