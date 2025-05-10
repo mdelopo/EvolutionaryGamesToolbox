@@ -116,22 +116,53 @@
 Λαμβάνεται ως αρχικό αποτέλεσμα των παραπάνω πράξεων για τον πληθυσμό το floor των δεκαδικών αποτελεσμάτων. Έπειτα, υπολογίζεται τυχόν έλλειμμα που προκύπτει από την εφαρμογή της συνάρτησης floor και ανατίθεται ένας ανά φορά νέος παίκτης σε κάποια στρατηγική τυχαία, μέχρις ότου να μηδενιστεί το έλλειμμα. Γίνεται και έλεγχος για το αν η στρατηγική βρίσκεται ήδη σε μηδενικό πληθυσμό, ώστε να αποφευχθεί η "αναγέννησή" της. Έτσι, ο συνολικός πληθυσμός των παικτών παραμένει σταθερός καθ' όλη τη διάρκεια της προσομοίωσης, όπως θεωρούν και οι Mathieu et al.
 
 Η επιλογή αυτή γίνεται συνειδητά. Δοκιμάστηκαν οι περιπτώσεις κατά τις οποίες ανατίθεται κάθε παίκτης στη στρατηγική η οποία έχει πληθυσμό πιο κοντά στον επόμενο ακέραιο (π.χ. αν κάποια στρατηγική είχε αρχικά υπολογσιμένο πληθυσμό 199.8, αυτό να μετατραπεί σε 200), όπως και η ακριβώς αντίθετη περίπτωση, όπου δηλαδή ανατίθεται στη στρατηγική πιο μακριά από τον επόμενο ακέραιο. Οι αλγόριθμοι αυτοί παρουσίασαν μερικές ανεπιθύμητες συμπεριφορές διατήρησης ενός πολύ χαμηλού αριθμού παικτών συγκεκριμένων στρατηγικών (π.χ. κάποια στρατηγική να κολλάει σε πληθυσμό 2 επειδή ο αρχικά υπολογισμένος πληθυσμός επόμενης γενεάς είναι 1.8, ή αντίστοιχα π.χ. 1.1). Διατηρώντας αυτό το τυχαίο στοιχείο, τα αποτελέσματα των προσομοιώσεων δεν παρουσιάζουν σημαντική διαφορά με αυτά δίχως τυχαιότητα, ενώ παράλληλα η μέθοδος εγγυάται ότι σε βάθος χρόνου οι "αδύναμες" στρατηγικές εξαφανίζονται πλήρως.
-\subsubsection{1η Προσομοίωση}
-
-\subsubsection{2η Προσομοίωση - Μονότονη Σύγκλιση}
-
-\subsubsection{3η Προσομοίωση - Φθίνουσες Ταλαντώσεις}
-
-\subsubsection{4η Προσομοίωση - Περιοδικές Κινήσεις}
-
-\subsubsection{5η Προσομοίωση - Αύξουσες Ταλαντώσεις}
-
-\subsubsection{6η Προσομοίωση - Χάος/Διαταραγμένες Ταλαντώσεις}
 
 \subsection{Η συνάρτηση TourTheFit}
 Η δεύτερη συνάρτηση που υλοποιήθηκε είναι η [POP,BST,FIT]=TourTheFit(B,Strategies,POP0,T,J), με ορίσματα και εξόδους παντελώς πανομοιότυπα με αυτά της προηγούμενης. Η μόνη ουσιαστική διαφορά κείτεται στο ότι πλέον, λόγω της θεωρητικής φύσης της προσομοίωσης, παραλείπεται το τμήμα του κώδικα που ήταν υπεύθυνο για τη διατήρηση ακεραίων στον πληθυσμό, καθώς επιτρέπονται και οι δεκαδικοί αριθμοί, αφού ο πληθυσμός δεν αποτελείται πραγματικά από παίκτες.
-\subsubsection{1η Προσομοίωση}
 
+\subsection{Προσομοίωσεις}
+\subsubsection{1η Προσομοίωση - Defectors may be strong}
+	\begin{figure}[H]
+	      \centering
+	      \includegraphics{Defectors may be strong.pdf}
+	      \caption{Defectors may be strong}
+	      \label{fig:2dmesh}
+	\end{figure}
+\subsubsection{2η Προσομοίωση - Μονότονη Σύγκλιση}
+	\begin{figure}[H]
+	      \centering
+	      \includegraphics{Monotonous Convergence.pdf}
+	      \caption{Monotonous Convergence}
+	      \label{fig:2dmesh}
+	\end{figure}
+\subsubsection{3η Προσομοίωση - Φθίνουσες Ταλαντώσεις}
+	\begin{figure}[H]
+	      \centering
+	      \includegraphics{Attenuated oscillatory movements.pdf}
+	      \caption{Attenuated oscillatory movements}
+	      \label{fig:2dmesh}
+	\end{figure}
+\subsubsection{4η Προσομοίωση - Περιοδικές Κινήσεις}
+	\begin{figure}[H]
+	      \centering
+	      \includegraphics{Periodic movements.pdf}
+	      \caption{Periodic movements}
+	      \label{fig:2dmesh}
+	\end{figure}
+\subsubsection{5η Προσομοίωση - Αύξουσες Ταλαντώσεις}
+	\begin{figure}[H]
+	      \centering
+	      \includegraphics{Increasing oscillations.pdf}
+	      \caption{Increasing oscillations}
+	      \label{fig:2dmesh}
+	\end{figure}
+\subsubsection{6η Προσομοίωση - Χάος/Διαταραγμένες Ταλαντώσεις}
+	\begin{figure}[H]
+	      \centering
+	      \includegraphics{Disordered oscillations.pdf}
+	      \caption{Disordered oscillations}
+	      \label{fig:2dmesh}
+	\end{figure}
 \section{Imitation Dynamics}
 
 \subsection{Η συνάρτηση TourSimImi}
