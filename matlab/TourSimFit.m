@@ -61,15 +61,18 @@ for i = 1: J
         POP(i+1, j) = floor(POP(i, j) * FIT(i, j)/total * N);
     end
     % TO DO: Add rounding error detection and fixing
-    N_new = sum(POP(i+1, :));
-    deficiency = N - N_new;
-    while(deficiency > 0)
-        k = randi(N_strat);
-        if POP(i, k)==0
-            continue
+    rounding = false;
+    if(rounding)
+        N_new = sum(POP(i+1, :));
+        deficiency = N - N_new;
+        while(deficiency > 0)
+            k = randi(N_strat);
+            if POP(i, k)==0
+                continue
+            end
+            POP(i+1, k) = POP(i+1, k) + 1;
+            deficiency = deficiency - 1;
         end
-        POP(i+1, k) = POP(i+1, k) + 1;
-        deficiency = deficiency - 1;
     end
 end
 end
