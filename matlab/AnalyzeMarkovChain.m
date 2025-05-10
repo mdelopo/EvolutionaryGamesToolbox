@@ -1,4 +1,4 @@
-function AnalyzeMarkovChain(P, POP0, Strategies)
+function AnalyzeMarkovChain(P, POP0, Strategies, Title)
     % INPUTS:
     %   P         - Transition matrix (NxN)
     %   POP0      - Initial population vector (1xS)
@@ -71,12 +71,30 @@ function AnalyzeMarkovChain(P, POP0, Strategies)
     state_labels = arrayfun(@(i) mat2str(state_space(i,:)), 1:N, 'UniformOutput', false);
 
     % Plot graph
-    figure;
-    h = plot(G, 'Layout','force');
+    fig=figure;
+    % Set figure size for A4 landscape minus 2.54 cm margins
+    a4_height_cm = 29.7;
+    a4_width_cm = 21.0;
+    margin_cm = 2.54;
+
+    usable_width = a4_width_cm - 2 * margin_cm;
+    usable_height = (a4_height_cm - 2 * margin_cm);
+    %usable_height=usable_width;
+    % Adjust figure position and size (on screen)
+    set(fig, 'Units', 'centimeters');
+    set(fig, 'Position', [0, 0, usable_width, usable_height*0.6]);
+
+    % Set correct paper settings for exporting
+    set(fig, 'PaperUnits', 'centimeters');
+    set(fig, 'PaperSize', [usable_width, usable_height*0.6]);
+    set(fig, 'PaperPosition', [0, 0, usable_width, usable_height*0.6]);
+
+    h = plot(G, 'Layout','force','UseGravity',true);
     h.NodeLabel = state_labels;
     h.NodeColor = colors;
     h.MarkerSize = 7;
     h.ArrowSize = 10;
+    h.EdgeLabelColor = "#A2142F";
     h.EdgeLabel = arrayfun(@(w) sprintf('%.2f', w), G.Edges.Weight, 'UniformOutput', false);
 
     % Add legend manually
@@ -93,14 +111,23 @@ function AnalyzeMarkovChain(P, POP0, Strategies)
         hLegend(i) = scatter(nan, nan, 70, legendColors(i,:), ...
                              'filled', 'o', 'MarkerEdgeColor', 'k');
     end
-    legend(hLegend, legendLabels, 'Location', 'bestoutside');
-    hold off;
+    legend(hLegend, legendLabels, 'Location', 'best');
 
-    % Display strategy labels
+    % Add second legend as subtitle
     legend_strategies = replace(Strategies,"_","\_");
-    annotation('textbox', [0.01, 0.01, 0.05, 0.05], 'String', ...
-        ['Strategies: ', strjoin(legend_strategies, ', ')], ...
-        'EdgeColor', 'none', 'HorizontalAlignment', 'left');
+    title(	Title);
+    subtitle("Strategies: "+ strjoin(legend_strategies, ', '));
+    %hold off;
+    %remove padding
+    ax = gca;
+    outerpos = ax.OuterPosition;
+    ti = ax.TightInset;
+    left = outerpos(1) + ti(1);
+    bottom = outerpos(2) + ti(2);
+    ax_width = outerpos(3) - ti(1) - ti(3);
+    ax_height = outerpos(4) - ti(2) - ti(4);
+    ax.Position = [left bottom ax_width ax_height];
+    exportgraphics(fig,'figures/'+Title+'.pdf','ContentType','vector')
 end
 
 function [state_space, POP0_index] = GenerateStateSpace(num_strategies, total_population, POP0)

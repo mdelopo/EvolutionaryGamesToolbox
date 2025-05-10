@@ -107,7 +107,7 @@ K = 1;
 T = 100;
 J = 100;
 P = TourTheImi(B, Strategies, POP0, K, T, J);
-AnalyzeMarkovChain(P, POP0, Strategies);
+AnalyzeMarkovChain(P, POP0, Strategies,"Example showcase of TourTheImi and AnalyzeMarkovChain");
 %% Testing default mode ("Individual") for best strategy calculation
 clear; clc;
 B = [3 1; 4 2];
@@ -117,7 +117,7 @@ K = 1;
 T = 100;
 J = 100;
 P = TourTheImi(B, Strategies, POP0, K, T, J);
-AnalyzeMarkovChain(P, POP0, Strategies);
+AnalyzeMarkovChain(P, POP0, Strategies,"Testing default mode (Individual) for best strategy calculation");
 %% Testing "Total" mode for best strategy calculation
 clear; clc;
 B = [3 1; 4 2];
@@ -127,7 +127,7 @@ K = 1;
 T = 100;
 J = 100;
 P = TourTheImi(B, Strategies, POP0, K, T, J, "Total");
-AnalyzeMarkovChain(P, POP0, Strategies);
+AnalyzeMarkovChain(P, POP0, Strategies,"Testing Total mode for best strategy calculation");
 %%
 B = [3 1; 4 2];
 Strategies = ["All_D", "All_C", "TitForTat"];
