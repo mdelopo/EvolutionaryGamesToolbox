@@ -1,3 +1,4 @@
+%XeLaTex+MakeIndex+BibTex%
 \documentclass[12pt]{article}
 \usepackage{fontspec}
 \usepackage{polyglossia}
@@ -17,7 +18,7 @@
 \usepackage{subcaption}
 
 % Set the page margins
-\geometry{margin=2.54cm}
+\geometry{a4paper,margin=2.54cm}
 
 \usepackage{kmath,kerkis} % The order of the packages matters; kmath changes the default text font
 %\usepackage[T1]{fontenc}
@@ -56,13 +57,10 @@
 \rhead{Υλοποίηση εξελικτικού πρωταθλήματος Axelrod}
 \rfoot{\thepage}
 
-%\title{Αναφορά εργαστηρίου}
-%\author{Όνομα Φοιτητή}
-%\date{\today}
 
 \begin{document}
 \begin{titlepage}
-\newgeometry{margin=2cm, tmargin=3cm, bmargin=3cm}
+\newgeometry{margin=2.54cm, tmargin=3cm, bmargin=3cm}
 \centering
 \begin{figure}[H]
 \centering
@@ -208,15 +206,15 @@
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
-      		\includegraphics[width=.9\textwidth]{900.pdf}
-		\caption{900}
-      		%\label{fig:900}
+      	\includegraphics[width=.9\textwidth]{900.pdf}
+		\caption{$\begin{bmatrix}9&0&0\end{bmatrix}$}
+      	\label{fig:900}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\centering
-      		\includegraphics[width=0.90\textwidth]{009.pdf}
-		\caption{009}
-      		%\label{fig:009}
+      	\includegraphics[width=0.90\textwidth]{009.pdf}
+		\caption{$\begin{bmatrix}0&0&9\end{bmatrix}$}
+      	\label{fig:009}
 	\end{subfigure}
 	\caption{Absorbing States may differ even for the same Starting State}
 	\end{figure}
@@ -225,14 +223,14 @@
 	\begin{figure}[H]
 	      \centering
 	      \includegraphics[width=0.95\textwidth]{Testing default mode (Individual) for best strategy calculation.pdf}
-	      \caption{Testing default mode (``Individual'') for best strategy calculation}
+	      \caption{Testing default mode (``Individual'') for best strategy calculation with $POP0=\begin{bmatrix}1&4&5\end{bmatrix}$}
 	     % \label{fig:2dmesh}
 	\end{figure}
 \subsubsection{3η Προσομοίωση - Δοκιμή μεθόδου ``Total'' για τον προσδιορισμό της καλύτερης στρατηγικής}
 	\begin{figure}[H]
 	      \centering
 	      \includegraphics[width=0.95\textwidth]{Testing Total mode for best strategy calculation}
-	      \caption{Testing ``Total'' mode for best strategy calculation}
+	      \caption{Testing ``Total'' mode for best strategy calculation with $POP0=\begin{bmatrix}1&4&5\end{bmatrix}$}
 	      %\label{fig:2dmesh}
 	\end{figure}
 
