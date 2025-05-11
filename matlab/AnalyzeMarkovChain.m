@@ -47,7 +47,7 @@ function AnalyzeMarkovChain(P, POP0, Strategies, Title)
     nodeGroups = strings(N,1);
     for i = 1:N
         if i == POP0_index
-            colors(i,:) = [0.2 0.4 0.9];  % Blue for starting state
+            colors(i,:) = [0.2 0.6 0.2];  % Blue for starting state
             nodeGroups(i) = "Starting State";
         elseif unreachable(i) && absorbing(i)
             colors(i,:) = [0.5 0.5 1];  % Light blue for unreachable absorbing
@@ -56,7 +56,7 @@ function AnalyzeMarkovChain(P, POP0, Strategies, Title)
             colors(i,:) = [1 0.8 0.6];  % Light orange for unreachable transient
             nodeGroups(i) = "Unreachable Transient";
         elseif absorbing(i)
-            colors(i,:) = [0.2 0.6 0.2];  % Green for absorbing
+            colors(i,:) = [0.2 0.4 0.9];  % Green for absorbing
             nodeGroups(i) = "Absorbing";
         elseif transient(i)
             colors(i,:) = [0.8 0.4 0.2];  % Orange for transient
@@ -103,8 +103,9 @@ function AnalyzeMarkovChain(P, POP0, Strategies, Title)
     hold on;
     legendLabels = ["Starting State", "Absorbing", "Transient", ...
                     "Unreachable Absorbing", "Unreachable Transient"];
-    legendColors = [0.2 0.4 0.9;  % Blue
+    legendColors = [
                     0.2 0.6 0.2;  % Green
+                    0.2 0.4 0.9;  % Blue
                     0.8 0.4 0.2;  % Orange
                     0.5 0.5 1;    % Light blue
                     1 0.8 0.6];   % Light orange
