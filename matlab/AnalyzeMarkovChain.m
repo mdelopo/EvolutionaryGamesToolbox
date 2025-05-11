@@ -94,7 +94,7 @@ function AnalyzeMarkovChain(P, POP0, Strategies, Title)
     h.NodeLabel = state_labels;
     h.NodeColor = colors;
     h.MarkerSize = 7;
-    h.ArrowSize = 10;
+    h.ArrowSize = 7;
     h.EdgeLabelColor = "#A2142F";
     h.EdgeLabel = arrayfun(@(w) sprintf('%.2f', w), G.Edges.Weight, 'UniformOutput', false);
     h.EdgeFontSize = 5;
