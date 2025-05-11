@@ -90,12 +90,14 @@ function AnalyzeMarkovChain(P, POP0, Strategies, Title)
     set(fig, 'PaperPosition', [0, 0, usable_width, usable_height*0.6]);
 
     h = plot(G, 'Layout','force','UseGravity',true);
+    axis off
     h.NodeLabel = state_labels;
     h.NodeColor = colors;
     h.MarkerSize = 7;
     h.ArrowSize = 10;
     h.EdgeLabelColor = "#A2142F";
     h.EdgeLabel = arrayfun(@(w) sprintf('%.2f', w), G.Edges.Weight, 'UniformOutput', false);
+    h.EdgeFontSize = 5;
 
     % Add legend manually
     hold on;
@@ -111,7 +113,7 @@ function AnalyzeMarkovChain(P, POP0, Strategies, Title)
         hLegend(i) = scatter(nan, nan, 70, legendColors(i,:), ...
                              'filled', 'o', 'MarkerEdgeColor', 'k');
     end
-    legend(hLegend, legendLabels, 'Location', 'best');
+    legend(hLegend, legendLabels, 'Location', 'best', 'Color',"none");
 
     % Add second legend as subtitle
     legend_strategies = replace(Strategies,"_","\_");
