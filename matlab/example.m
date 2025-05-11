@@ -85,18 +85,6 @@ scores = Axel(B, Strategies, Pop, T);
     [POP3] = TourSimFit(B, Strategies, POP0, T, J,true);
     % Plot Populations of Strategies Over Generations
     fig = plotPopulationsOfStrategiesOverGenerations(Strategies, POP1, POP2,POP3,"Disordered oscillations");
-    %% Sensitivity to CIPD payoff
-    clear; clc;
-    B = [3 0; 4.6 1];
-    Strategies = ["per_ccd", "per_ddc", "soft_majo"];
-    POP0 = [300; 244; 100];
-    T = 1000;
-    J = 500;
-    [POP1] = TourTheFit(B, Strategies, POP0, T, J);
-    [POP2] = TourSimFit(B, Strategies, POP0, T, J);
-    [POP3] = TourSimFit(B, Strategies, POP0, T, J,true);
-    % Plot Populations of Strategies Over Generations
-    fig = plotPopulationsOfStrategiesOverGenerations(Strategies, POP1, POP2,POP3,"Sensitivity to CIPD payoff");
 %% Imitation Dynamics
     %% Example showcase of TourTheImi and AnalyzeMarkovChain
     clear; clc;
