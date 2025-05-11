@@ -1,18 +1,7 @@
 function [POP, BST] = TourSimImi(B, Strategies, POP0, K, T, J, mode)
 % TourSimImi - Simulates the Imitation Dynamics Tournament for J generations
-%
-% Inputs:
-%   B - 2x2 payoff matrix for the prisoner's dilemma
-%   Strategies - Cell array of strings with strategy names (e.g. {'All_C', 'All_D', 'TitForTat'})
-%   POP0 - Initial population distribution (vector with number of agents using each strategy)
-%   K - Number of people that imitate the best strategy after each generation
-%   T - Number of rounds played for each match in the tournament
-%   J - Number of generations for the simulation
-%
-% Outputs:
-%   POP - Matrix of population distributions for each generation (J+1 x numStrategies)
-%   BST - Matrix indicating which strategies were best in each generation (J x numStrategies)
-%         1 = best strategy, 0 = not best
+% mode="Individual": Best Strategy = Strategy of best player
+% mode="Total": Best Strategy = Stategy with highest total score (sum of scores of players)
 
 arguments
     B
@@ -49,18 +38,18 @@ for gen = 1:J
 
     % Calculate payoffs for each strategy and find the best strategies
     % (those with maximum payoff) depending on mode selected
+    payoffs = calculatePayoffs(B, Strategies, currentPop, T);
+    maxPayoff = max(payoffs);
     if mode == "Individual"
         bestStrategyIndices = calculateBestStrategiesFromIndividuals(B, Strategies, currentPop, T);
     else
-        payoffs = calculatePayoffs(B, Strategies, currentPop, T);
-        maxPayoff = max(payoffs);
         bestStrategyIndices = find(payoffs == maxPayoff);
     end
     % Record best strategies for this generation
     BST(gen, bestStrategyIndices) = 1;
 
     % Calculate the population for the next generation
-    nextPop = updatePopulation(currentPop, payoffs, K, numStrategies);
+    nextPop = updatePopulation(currentPop, bestStrategyIndices, K, numStrategies);
 
     % Store the new population
     POP(gen+1, :) = nextPop;
@@ -139,12 +128,9 @@ payoff = totalPayoff;  % Return total payoff, not average
 
 end
 
-function nextPop = updatePopulation(currentPop, payoffs, K, numStrategies)
+function nextPop = updatePopulation(currentPop, bestStrategyIndices, K, numStrategies)
 % Update the population based on imitation dynamics with randomness
 
-% Find the best strategies
-maxPayoff = max(payoffs);
-bestStrategyIndices = find(payoffs == maxPayoff);
 numBestStrategies = length(bestStrategyIndices);
 
 % Find non-best strategies with population
@@ -179,6 +165,7 @@ end
 % Randomly select actualK agents to imitate
 if ~isempty(agentPool)
     % Randomly shuffle the agent pool
+    rng("shuffle")
     agentPool = agentPool(randperm(length(agentPool)));
 
     % Select the first actualK agents
