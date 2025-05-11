@@ -252,6 +252,18 @@
 	\end{figure}
 
 \clearpage
+\section{Σύγκριση Fitness vs Imitation Dynamics}
+	\begin{figure}[h]
+	      \centering
+	      \includegraphics[width=0.9\textwidth]{Fitness Dynamics vs Imitation Dynamics.pdf}
+	      \caption{Fitness Dynamics vs Imitation Dynamics $\begin{bmatrix}All\_D&All\_C&TitForTat\end{bmatrix}$ $POP0=\begin{bmatrix}4&6&4\end{bmatrix}$}
+	      \label{fig:Fitness Dynamics vs Imitation Dynamics}
+	\end{figure}
+Στο Σχήμα \ref{fig:Fitness Dynamics vs Imitation Dynamics} γίνεται μία σύγκριση μεταξύ των αποτελεσμάτων των TourSimFit, TourSimImi με mode=''Individual'' και TourSimImi με mode=''Total'' για στρατηγικές $\begin{bmatrix}All\_D&All\_C&TitForTat\end{bmatrix}$ με $POP0=\begin{bmatrix}4&6&4\end{bmatrix}$.
+Παρατηρούμε ότι η περίπτωση Fitness μοιάζει με την περίπτωση ``Individual'' mode, ωστόσο και μεταξύ των δύο σημειώνεται η σημαντική διαφορά ότι στα Imitation Dynamics επιβιώνει μόνο μία στρατηγική. Η περίπτωση του ``Total'' mode έχει παρόμοια εξέλιξη με το ``Individual'' mode αλλά παρατηρούμε ότι επιβιώνει διαφορετική στρατηγική, συγκεκριμένα η ``All\_C'', επειδή έχει αρχικό πληθυσμό μεγαλύτερο από τις άλλες στρατηγικές και άρα εκμεταλλεύεται καλύτερα την συμπαθή στρατηγική ``TitForTat'' μέσω της λειτουργίας του ``Total'' mode για εύρεση της βέλτιστης στρατηγικής.
+
+
+\clearpage
 \section{Τελικά Συμπεράσματα}
 Από την παραπάνω ανάλυση των δύο εξελικτικών δυναμικών προκύπτουν τα παρακάτω συμπεράσματα:
 
