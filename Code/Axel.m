@@ -1,5 +1,4 @@
 function Scores = Axel(B, Strategies, Pop, T)
-    addpath('./strategies/');
     N = sum(Pop); % Total number of players
     Scores = zeros(N, 1);
     funList = cellfun(@str2func,Strategies,'uniformOutput',false);
