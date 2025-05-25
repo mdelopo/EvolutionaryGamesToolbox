@@ -36,7 +36,7 @@ for i = 1: N_strat
             matchpayoffs(1) = matchpayoffs(1) + B(History(v, 1) , History(v, 2));
             matchpayoffs(2) = matchpayoffs(2) + B(History(v, 2) , History(v, 1));
         end
-        payoff(i,j) = matchpayoffs(1);
+        payoff(i, j) = matchpayoffs(1);
         payoff(j, i) = matchpayoffs(2);
     end
 end
