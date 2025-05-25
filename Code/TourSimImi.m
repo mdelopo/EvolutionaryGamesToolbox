@@ -19,7 +19,6 @@ if mode~="Individual" && mode~="Total"
     BST = [];
     return
 end
-addpath('./strategies/');
 
 % Number of strategies
 numStrategies = length(Strategies);

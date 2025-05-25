@@ -19,7 +19,6 @@ if mode~="Individual" && mode~="Total"
     return
 end
 
-addpath('./strategies/');
 S = length(Strategies);         % Number of strategies
 N = sum(POP0);                  % Total number of agents
 
