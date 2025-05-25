@@ -1,4 +1,6 @@
-function fig = plotPopulationOfStrategiesOverGenerations(Strategies, POP, Title)
+function fig = plotPopulationsTourSimImi(Strategies, POP, Title)
+global figurepath
+
 % Determine number of generations
 num_generations = size(POP, 1);
 % Create generation index
@@ -17,6 +19,6 @@ legend(legend_strategies);
 title(Title);
 subtitle('Population of Strategies Over Generations')
 grid on;
-set(1, 'units', 'centimeters', 'pos', [0 0 (21-5.1) (29.7-5.1)/3.5])
-exportgraphics(fig,'figures/'+Title+'.pdf','ContentType','vector')
+%set(1, 'units', 'centimeters', 'pos', [0 0 (21-5.1) (29.7-5.1)/3.5])
+%exportgraphics(fig,figurepath+Title+'.pdf','ContentType','vector')
 end

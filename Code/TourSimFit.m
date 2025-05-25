@@ -1,5 +1,15 @@
-function [POP,BST,FIT] = TourTheFit(B,Strategies,POP0,T,J)
-addpath('./strategies/');
+function [POP,BST,FIT] = TourSimFit(B,Strategies,POP0,T,J,compensation)
+arguments
+    B
+    Strategies
+    POP0
+    T
+    J
+    compensation = false;
+end
+
+
+% addpath('./strategies/');
 funList = cellfun(@str2func,Strategies,'uniformOutput',false);
 N_strat = length(Strategies);
 payoff = zeros(N_strat);
@@ -58,7 +68,20 @@ for i = 1: J
     total_each = POP(i, :).*FIT(i, :);
     total = sum(total_each);
     for j = 1: N_strat
-        POP(i+1, j) = POP(i, j) * FIT(i, j)/total * N;
+        POP(i+1, j) = floor(POP(i, j) * FIT(i, j)/total * N);
+    end
+    % TO DO: Add rounding error detection and fixing
+    if(compensation)
+        N_new = sum(POP(i+1, :));
+        deficiency = N - N_new;
+        while(deficiency > 0)
+            k = randi(N_strat);
+            if POP(i, k)==0
+                continue
+            end
+            POP(i+1, k) = POP(i+1, k) + 1;
+            deficiency = deficiency - 1;
+        end
     end
 end
 end

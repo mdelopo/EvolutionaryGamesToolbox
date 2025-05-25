@@ -1,4 +1,6 @@
-function fig = plotFitnessVSImitation(Strategies, POP1, POP2, POP3, Title)
+function fig = plotPopulationsOfStrategiesOverGenerations(Strategies, POP1, POP2, POP3, Title)
+global figurepath
+
 % Determine number of generations
 num_generations = size(POP1, 1);
 % Create generation index
@@ -12,7 +14,7 @@ for i=1:size(POP1,2)
     plot(generations, POP1(:,i), 'LineWidth', 2); hold on;
 end
 % Add labels and legend
-subtitle('Fitness Dynamics')
+subtitle('TourTheFit')
 grid on;
 
 nexttile
@@ -21,7 +23,7 @@ for i=1:size(POP2,2)
     plot(generations, POP2(:,i), 'LineWidth', 2); hold on;
 end
 % Add labels and legend
-subtitle('Imitation Dynamics - Individual')
+subtitle('TourSimFit - without compensation')
 grid on;
 
 nexttile
@@ -30,7 +32,7 @@ for i=1:size(POP3,2)
     plot(generations, POP3(:,i), 'LineWidth', 2); hold on;
 end
 % Add labels and legend
-subtitle('Imitation Dynamics - Total')
+subtitle('TourSimFit - with compensation')
 grid on;
 
 t=title(fig,Title);
@@ -45,5 +47,5 @@ xlabel(fig, 'Generation');
 ylabel(fig, 'Population');
 set(1, 'units', 'centimeters', 'pos', [0 0 (21-5.1) (29.7-5.1)/1.3])
 
-exportgraphics(fig,'figures/'+Title+'.pdf','ContentType','vector')
+exportgraphics(fig,figurepath+Title+'.pdf','ContentType','vector')
 end
