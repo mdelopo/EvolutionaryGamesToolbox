@@ -1,4 +1,5 @@
 function AnalyzeMarkovChain(P, POP0, Strategies, Title)
+global figurepath    
     % INPUTS:
     %   P         - Transition matrix (NxN)
     %   POP0      - Initial population vector (1xS)
@@ -130,7 +131,7 @@ function AnalyzeMarkovChain(P, POP0, Strategies, Title)
     ax_width = outerpos(3) - ti(1) - ti(3);
     ax_height = outerpos(4) - ti(2) - ti(4);
     ax.Position = [left bottom ax_width ax_height];
-    exportgraphics(fig,'figures/'+Title+'.pdf','ContentType','vector')
+    exportgraphics(fig,figurepath+Title+'.pdf','ContentType','vector')
 end
 
 function [state_space, POP0_index] = GenerateStateSpace(num_strategies, total_population, POP0)
