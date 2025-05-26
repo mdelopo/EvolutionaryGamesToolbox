@@ -136,16 +136,22 @@ The function TourTheImi computes the state transition matrix of a given evolutio
 This is the documentation of the Examples contained in the Examples folder of the repository. More specifically, the situation each example simulates is presented and any possible links to the paper by Mathieu et al are mentioned.
 
 \subsection{example01}
+The first example shows the results of TourTheFit, TourSimFit with compensation and TourSimFit without compensation in the case presented by Mathieu et al in Figure 1, with Title ``Defectors may be strong''. The functions are called with payoff matrix $B = \begin{bmatrix} 3 & 0 \\ 5 & 1 \end{bmatrix}$, $Strategies = ["per\_ddc", "Alternator", "soft\_majo"]$, initial population $POP0 = [100; 100; 100]$, number of rounds per match $T = 1000$ and number of generations $J = 90$.
 
 \subsection{example02}
+This shows the results of TourTheFit, TourSimFit with compensation and TourSimFit without compensation in the case presented by Mathieu et al in Figure 2, with Title ``Monotonous convergence''. The functions are called with payoff matrix $B = \begin{bmatrix} 3 & 0 \\ 5 & 1 \end{bmatrix}$, $Strategies = ["Grim", "TitForTat", "Alternator"]$, initial population $POP0 = [100; 100; 100]$, number of rounds per match $T = 1000$ and number of generations $J = 10$.
 
 \subsection{example03}
+This shows the results of TourTheFit, TourSimFit with compensation and TourSimFit without compensation in the case presented by Mathieu et al in Figure 3, with Title ``Attenuated oscillatory movements''. The functions are called with payoff matrix $B = \begin{bmatrix} 3 & 0 \\ 5 & 1 \end{bmatrix}$, $Strategies = ["per\_ccd", "per\_ddc", "soft\_majo"]$, initial population $POP0 = [450; 1000; 100]$, number of rounds per match $T = 1000$ and number of generations $J = 420$.
 
 \subsection{example04}
+This shows the results of TourTheFit, TourSimFit with compensation and TourSimFit without compensation in the case presented by Mathieu et al in Figure 4, with Title ``Periodic movements''. The functions are called with payoff matrix $B = \begin{bmatrix} 3 & 0 \\ 5 & 1 \end{bmatrix}$, $Strategies = ["per\_ccd", "per\_ddc", "soft\_majo"]$, initial population $POP0 = [300; 200; 100]$, number of rounds per match $T = 1000$ and number of generations $J = 1000$.
 
 \subsection{example05}
+This shows the results of TourTheFit, TourSimFit with compensation and TourSimFit without compensation in the case presented by Mathieu et al in Figure 5, with Title ``Increasing oscillations''. The functions are called with payoff matrix $B = \begin{bmatrix} 3 & 0 \\ 4.72 & 1 \end{bmatrix}$, $Strategies = ["per\_ccd", "per\_ddc", "soft\_majo"]$, initial population $POP0 = [300; 400; 200]$, number of rounds per match $T = 1000$ and number of generations $J = 450$.
 
 \subsection{example06}
+This shows the results of TourTheFit, TourSimFit with compensation and TourSimFit without compensation in the case presented by Mathieu et al in Figure 6, with Title ``Disordered oscillations''. The functions are called with payoff matrix $B = \begin{bmatrix} 3 & 0 \\ 5 & 1 \end{bmatrix}$, $Strategies = ["soft\_majo", "per\_ccccd", "Prober"]$, initial population $POP0 = [100; 500; 800]$, number of rounds per match $T = 1000$ and number of generations $J = 280$.
 
 \subsection{example07}
 
@@ -156,37 +162,54 @@ This is the documentation of the Examples contained in the Examples folder of th
 \subsection{example10}
 
 \section{Strategies of strategies subfolder in the Code folder}
-Lastly, this is the documentation for all strategies included in the strategies subfolder of the Code folder. For more details, the exact source code is available for each of the following strategies. Note that you can always enhance this collection with strategies of your own. For your created strategies to work with the toolbox, follow the format used in the strategies given: let the function have form function Move = YourStrategy(History), where History is the $T \times 2$ matrix of moves by both players for each turn, regard the player of your strategy as player 1 (the first column of the History matrix, it is flipped in case the player is actually player 2) and make Move = 2 in case of defection and Move = 1 in case of cooperation. Also, suppose that each strategy can only access past moves (player 2 cannot access player 1's current round move) and that each strategy does not know the amount of rounds played in each match. Lastly, because of the current form of simulation and theoretical analysis functions (that prioritize low running times), strategies including random elements are not included (in case you wish to include some, most functions will probably fail).
+Lastly, this is the documentation for all strategies included in the strategies subfolder of the Code folder. For more details, the exact source code is available for each of the following strategies. Note that you can always enhance this collection with strategies of your own. For your created strategies to work with the toolbox, follow the format used in the strategies given: let the function have form function Move = YourStrategy(History), where History is the $T \times 2$ matrix of moves by both players for each turn, regard the player of your strategy as player 1 (the first column of the History matrix, it is flipped in case the player is actually player 2) and make Move = 2 in case of defection and Move = 1 in case of cooperation. Also, suppose that each strategy can only access past moves (player 2 cannot access player 1's current round move) and that each strategy does not know the amount of rounds played in each match. Lastly, because of the current form of simulation and theoretical analysis functions (that prioritize low running times), strategies including random elements are not included (in case you wish to include some, most functions will probably fail). For the strategies below, C stands for Cooperation and D stands for Defection.
 
 \subsection{All\_C}
+Strategy that always cooperates.
 
 \subsection{All\_D}
+Strategy that always defects.
 
 \subsection{Alternator}
+Strategy that alternates between cooperating and defecting, starting with cooperation in the first round.
 
 \subsection{Cycler}
+Strategy that permanently cycles the moves C, C, C, D.
 
 \subsection{Detective}
+Strategy that starts with the moves C, D, C, C. If the opponent defects at least once in these first four rounds, play as TitForTat forever. Else, always defect.
 
 \subsection{Grim}
+Strategy that always cooperates unless the opponent defects: after the first opponent defection, always defect.
 
 \subsection{per\_ccccd}
+Strategy that permanently cycles the moves C, C, C, C, D.
 
 \subsection{per\_ccd}
+Strategy that permanently cycles the moves C, C, D.
 
 \subsection{per\_ddc}
+Strategy that permanently cycles the moves D, D, C.
 
 \subsection{Prober}
+Strategy that starts with the moves D, C, C. If the opponent cooperates at moves 2 and 3, plays defect for the rest of the game. Otherwise plays as TitForTat.
 
 \subsection{SneakyTitForTat}
+Strategy that starts by cooperating in the first round and playing as TitForTat in the second round. If the opponent has not defected in these first two rounds, defect once and check the opponent's response. If the opponents retaliates, play a cooperation to repent and then play as TitForTat. If the opponent does not retaliate, keep playing defect and checking the opponent's response as before.
 
 \subsection{soft\_majo}
+Strategy that plays the same move as the majority of the opponent's moves up until the previous round. In case of equality, cooperate.
 
 \subsection{SpitefulTitForTat}
+Strategy that starts by cooperating and then plays like TitForTat, until the opponent defects twice in a row, in which case the player always defects.
 
 \subsection{TitForTat}
+Strategy that cooperates in the first move and for the rest of the game plays as the opponent's move in the previous round.
 
 \subsection{TitForTwoTats}
+Strategy that plays defect only if the opponent has defected twice in a row. Otherwise, always cooperates.
 
 \subsection{TwoTitsForTat}
+Strategy that starts by cooperating and replies to each opponent defection by two defections of its own. More specifically, if there has been a defection by the opponent in the two previous rounds, the player chooses defect. Otherwise, plays cooperate.
+
 \end{document}
