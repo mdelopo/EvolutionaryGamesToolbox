@@ -1,10 +1,12 @@
-%% Testing "Total" mode for best strategy calculation
+%% Sensitivity of winner to population's size: First Simulation
 clear; clc;
-B = [3 1; 4 2];
-Strategies = ["All_D", "All_C", "TitForTat"];
-POP0 = [1; 4; 5];
-K = 1;
-T = 100;
-J = 15;
-P = TourTheImi(B, Strategies, POP0, K, T, J, "Total");
-AnalyzeMarkovChain(P, POP0, Strategies,"Testing Total mode for best strategy calculation");
+B = [3 0; 5 1];
+Strategies = ["per_ddc", "soft_majo", "Alternator"];
+POP0 = [100; 159; 100];
+T = 1000;
+J = 120;
+[POP1] = TourTheFit(B, Strategies, POP0, T, J);
+[POP2] = TourSimFit(B, Strategies, POP0, T, J);
+[POP3] = TourSimFit(B, Strategies, POP0, T, J,true);
+% Plot Populations of Strategies Over Generations
+fig = plotPopulationsOfStrategiesOverGenerations(Strategies, POP1, POP2,POP3,"Sensitivity of winner to population's size - First Simulation");

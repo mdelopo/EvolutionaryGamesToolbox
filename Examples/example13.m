@@ -1,6 +1,6 @@
-%% Sensitivity of dynamics to population's size: First Simulation
+%% Sensitivity to CIPD payoff: First Simulation
 clear; clc;
-B = [3 0; 5 1];
+B = [3 0; 4.6 1];
 Strategies = ["per_ccd", "soft_majo", "per_ddc"];
 POP0 = [300; 100; 244];
 T = 1000;
@@ -9,4 +9,4 @@ J = 1000;
 [POP2] = TourSimFit(B, Strategies, POP0, T, J);
 [POP3] = TourSimFit(B, Strategies, POP0, T, J,true);
 % Plot Populations of Strategies Over Generations
-fig = plotPopulationsOfStrategiesOverGenerations(Strategies, POP1, POP2,POP3,"Sensitivity of dynamics to population's size - First Simulation");
+fig = plotPopulationsOfStrategiesOverGenerations(Strategies, POP1, POP2,POP3,"Sensitivity to CIPD payoff - First Simulation");

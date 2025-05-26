@@ -1,13 +1,12 @@
-%% Fitness Dynamics vs Imitation Dynamics
+%% Sensitivity of winner to population's size: Second Simulation
 clear; clc;
-B = [3 1; 4 2];
-Strategies = ["All_D", "All_C", "TitForTat"];
-POP0 = [4; 6; 4];
-K = 1;
-T = 100;
-J = 15;
-[POP1] = TourSimFit(B, Strategies, POP0, T, J);
-[POP2] = TourSimImi(B, Strategies, POP0, K, T, J);
-[POP3] = TourSimImi(B, Strategies, POP0, K, T, J, "Total");
+B = [3 0; 5 1];
+Strategies = ["per_ddc", "soft_majo", "Alternator"];
+POP0 = [100; 160; 100];
+T = 1000;
+J = 25;
+[POP1] = TourTheFit(B, Strategies, POP0, T, J);
+[POP2] = TourSimFit(B, Strategies, POP0, T, J);
+[POP3] = TourSimFit(B, Strategies, POP0, T, J,true);
 % Plot Populations of Strategies Over Generations
-fig = plotFitnessVSImitation(Strategies, POP1, POP2,POP3,"Fitness Dynamics vs Imitation Dynamics");
+fig = plotPopulationsOfStrategiesOverGenerations(Strategies, POP1, POP2,POP3,"Sensitivity of winner to population's size - Second Simulation");
