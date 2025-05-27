@@ -254,18 +254,20 @@ From this point on, the simulations of the fitness dynamics are presented, using
 Already from the first simulation (Figure~\ref{fig:Defectors may be strong}), an interesting result emerges. The purpose of this simulation is to demonstrate that, in specific sets of strategies and favorable initial population values, defecting strategies such as \texttt{per\_ddc} are capable of dominating. However, the theoretical analysis of the scenario studied in the paper does not present exactly the same picture. This is due to the fact that the population of \texttt{soft\_majo} in the simulation cases completely disappears around the 20th generation, whereas in the theoretical case, this does not occur. Thus, after a few generations and a relative decrease in the population of \texttt{per\_ddc}, the strategy \texttt{soft\_majo} returns and the strategy \texttt{Alternator} develops, which is essentially the perfect opponent of \texttt{soft\_majo}, as it defects exactly as much as necessary to keep \texttt{soft\_majo} cooperating. After a certain point, of course, both of these populations begin to decline again, while the population of \texttt{per\_ddc} increases, which leads us to suspect that this example theoretically results in oscillation. In the simulations, however---in both the \texttt{compensation} case and the one without it---the results are very similar to those in the paper: the slight variation in the \texttt{compensation} case is due to the stochastic element, which makes the curve appear less smooth than in the case without \texttt{compensation}. Run example01 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
-	      \centering
-	      \includegraphics[scale=0.8]{Defectors may be strong.pdf}
-	      \caption{Defectors may be strong}
-	      \label{fig:Defectors may be strong}
+		\centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig1.jpeg}\par\vspace{0.5em}
+		\includegraphics[width=0.7\textwidth]{Defectors may be strong.pdf}
+	    \caption{1st Simulation - Defectors may be strong}
+	    \label{fig:Defectors may be strong}
 	\end{figure}
 \subsubsection{2nd Simulation - Monotonous Convergence}
 From now on, the results are presented for the simulations used by Mathieu et al. to classify the graphs into 5 categories, the first of which (Figure~\ref{fig:Monotonous Convergence}) is the monotonous convergence of populations. This is the most common form that emerges, as the oscillations presented below are quite sensitive to initial conditions. The results of both the theoretical analysis and the two simulations are identical to those of Mathieu et al., with the only difference being a slightly different final population in the case of \texttt{compensation}, which is again due to the stochastic element. However, the ranking of the strategies remains the same. Run example02 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
 	      \centering
-	      \includegraphics[scale=0.8]{Monotonous Convergence.pdf}
-	      \caption{Monotonous Convergence}
+		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig2.jpeg}\par\vspace{0.5em}
+	      \includegraphics[width=0.7\textwidth]{Monotonous Convergence.pdf}
+	      \caption{2nd Simulation - Monotonous Convergence}
 	      \label{fig:Monotonous Convergence}
 	\end{figure}
 \subsubsection{3rd Simulation - Attenuated Oscillatory movements}
@@ -273,8 +275,9 @@ The next category of results from the paper is the diminishing oscillations of p
 
 	\begin{figure}[h]
 	      \centering
-	      \includegraphics[scale=0.8]{Attenuated oscillatory movements.pdf}
-	      \caption{Attenuated oscillatory movements}
+		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig3.jpeg}\par\vspace{0.5em}
+	      \includegraphics[width=0.7\textwidth]{Attenuated oscillatory movements.pdf}
+	      \caption{3rd Simulation - Attenuated oscillatory movements}
 	      \label{fig:Attenuated oscillatory movements}
 	\end{figure}
 \subsubsection{4th Simulation - Periodic movements}
@@ -282,8 +285,9 @@ The third case is the appearance of periodic movements/oscillations (Figure~\ref
 
 	\begin{figure}[h]
 	      \centering
-	      \includegraphics[scale=0.8]{Periodic movements.pdf}
-	      \caption{Periodic movements}
+		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig4.jpeg}\par\vspace{0.5em}
+	      \includegraphics[width=0.7\textwidth]{Periodic movements.pdf}
+	      \caption{4th Simulation - Periodic movements}
 	      \label{fig:Periodic movements}
 	\end{figure}
 \subsubsection{5th Simulation - Increasing oscillations}
@@ -295,8 +299,9 @@ B = \begin{bmatrix} 3 & 0 \\ 4.72 & 1 \end{bmatrix}
 
 	\begin{figure}[h]
 	      \centering
-	      \includegraphics[scale=0.8]{Increasing oscillations.pdf}
-	      \caption{Increasing oscillations}
+		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig5.jpeg}\par\vspace{0.5em}
+	      \includegraphics[width=0.7\textwidth]{Increasing oscillations.pdf}
+	      \caption{5th Simulation - Increasing oscillations}
 	      \label{fig:Increasing oscillations}
 	\end{figure}
 \subsubsection{6th Simulation - Chaos/Disordered oscillations}
@@ -304,8 +309,9 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 
 	\begin{figure}[h]
 	      \centering
-	      \includegraphics[scale=0.8]{Disordered oscillations.pdf}
-	      \caption{Disordered oscillations}
+		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig6.jpeg}\par\vspace{0.5em}
+	      \includegraphics[width=0.7\textwidth]{Disordered oscillations.pdf}
+	      \caption{6th Simulation - Disordered oscillations}
 	      \label{fig:Disordered oscillations}
 	\end{figure}
 
@@ -333,7 +339,7 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 
 \clearpage
 \section{Imitation Dynamics}
-Η δεύτερη εξελικτική δυναμική που θα παρουσιαστεί είναι αυτή των Imitation Dynamics - δυναμική μίμησης. Στην περίπτωση αυτή, δεν υπολογίζεται η νέα κατανομή του πληθυσμού αυστηρά ως συνάρτηση του fitness της κάθε στρατηγικής για κάθε γενιά, αλλά υιοθετείται μία πιο απλή και ίσως πιο εφαρμόσιμη στην πραγματικότητα λογική: σε κάθε γενιά, βρίσκουμε τη στρατηγική (ή σε περίπτωση ισοπαλίας τις στρατηγικές) που ανταποκρίθηκαν καλύτερα. 'Επειτα, έχοντας ορίσει τον αριθμό K των παικτών που αλλάζουν στρατηγική ανά γενιά, επιλέγονται τυχαία K παίκτες μη βέλτιστης στρατηγικής και υιοθετούν μία εκ των βέλτιστων στρατηγικών, πάλι τυχαία, σε περίπτωση ισοβαθμίας. 
+Η δεύτερη εξελικτική δυναμική που θα παρουσιαστεί είναι αυτή των Imitation Dynamics - δυναμική μίμησης. Στην περίπτωση αυτή, δεν υπολογίζεται η νέα κατανομή του πληθυσμού αυστηρά ως συνάρτηση του fitness της κάθε στρατηγικής για κάθε γενιά, αλλά υιοθετείται μία πιο απλή και ίσως πιο εφαρμόσιμη στην πραγματικότητα λογική: σε κάθε γενιά, βρίσκουμε τη στρατηγική (ή σε περίπτωση ισοπαλίας τις στρατηγικές) που ανταποκρίθηκαν καλύτερα. Έπειτα, έχοντας ορίσει τον αριθμό K των παικτών που αλλάζουν στρατηγική ανά γενιά, επιλέγονται τυχαία K παίκτες μη βέλτιστης στρατηγικής και υιοθετούν μία εκ των βέλτιστων στρατηγικών, πάλι τυχαία, σε περίπτωση ισοβαθμίας. 
 
 Να επισημανθεί ότι η επιλογή γίνεται μόνο μεταξύ παικτών μη βέλτιστης στρατηγικής και όχι μεταξύ όλων των παικτών του πληθυσμού. Αυτό θεωρούμε πως ανταποκρίνεται περισσότερο στην πραγματικότητα - αν βρίσκεται κάποιος παίκτης ήδη στη βέλτιστη στρατηγική, γιατί να σκεφτεί να αλλάξει στρατηγική; Η επιλογή αυτή έχει μερικές συνέπειες στα αποτελέσματα που παρουσιάζονται παρακάτω.
 
