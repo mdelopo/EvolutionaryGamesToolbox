@@ -8,10 +8,12 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{mathtools}
-\graphicspath{{../matlab/figures/}}
+\graphicspath{{../Code/figures/}}
 \usepackage{hyperref} % Add hyperref package for clickable links
 \usepackage{amsmath}
 \usepackage{tabularx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \usepackage{float}
 \usepackage{caption}
@@ -53,8 +55,8 @@
 % Define header and footer
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{Ομάδα 2}
-\rhead{Υλοποίηση εξελικτικού πρωταθλήματος Axelrod}
+\lhead{Team 2}
+\rhead{Evolutionary Games Toolbox}
 \rfoot{\thepage}
 
 
@@ -64,16 +66,16 @@
 \centering
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{banner-horizontal-black300ppi.png}\par % Image on top of title
+\includegraphics[width=0.8\textwidth]{banner-horizontal-black-en.png}\par % Image on top of title
 \end{figure}
 %\textcolor{black}{\large \bfseries Αριστοτέλειο Πανεπιστήμιο Θεσσαλονίκης\\}\par
 \vspace{18pt}
-\textcolor{black}{\Large \bfseries Τμήμα Ηλεκτρολόγων Μηχανικών\\και Μηχανικών Υπολογιστών\\}\par
+\textcolor{black}{\Large \bfseries Department of Electrical\\ and Computer Engineering\\}\par
 \vspace{1cm}
 \vfill
-\textcolor{black}{\Large \bfseries Θεωρία Παιγνίων}\par
+\textcolor{black}{\Large \bfseries Group Project for the Game Theory Course}\par
 \vspace{12pt}
-\textcolor{black}{\large \bfseries Υλοποίηση εξελικτικού πρωταθλήματος Axelrod}\par
+\textcolor{black}{\large \bfseries Evolutionary Games Toolbox}\par
 
 \vspace{0.5cm} % Adjust vertical spacing here
 \vfill
@@ -82,97 +84,252 @@
 {\large
 \def\arraystretch{1.3}
 \begin{tabularx}{\textwidth}{ R|L }
-\textbf{Ομάδα}                			 & 2           \\
-\textbf{Βαπόρης Δημήτριος}      & ΑΕΜ 10625 \\
-\textbf{Βουλκίδης Βλάσιος}        & ΑΕΜ 10627 \\
-\textbf{Ντελόπουλος Εμμανουήλ}      & ΑΕΜ 10693 \\
-\textbf{Υπεύθυνος Καθηγητής}           & Κεχαγιάς Αθανάσιος\\
+\textbf{Group Number}                			 & 2           \\
+\textbf{Delopoulos Emmanouil}      & entelopo@ece.auth.gr \\
+\textbf{Vaporis Dimitrios}        & dvaporis@ece.auth.gr \\
+\textbf{Voulkidis Vlasios}      & vlasiosv@ece.auth.gr \\
+\textbf{Professor}           & Kehagias Athanasios\\
 \end{tabularx}
 }
 \vspace{0.5cm}
 \vfill
-\textcolor{black}{\large \bfseries Εαρινό Εξάμηνο 2025}\par
+\textcolor{black}{\large \bfseries May 2025}\par
 \end{titlepage}
 \restoregeometry
 
 \tableofcontents % Table of Contents
 
 \clearpage
-\section{Εισαγωγή}
-Το συγκεκριμένο αρχείο είναι η αναφορά της εργασίας για το μάθημα Θεωρία Παιγνίων. Αντικείμενο της εργασίας αυτής είναι η υλοποίηση και η μελέτη του εξελικτικού πρωταθλήματος Axelrod στο παίγνιο "Δίλημμα του Φυλακισμένου". Με την ονομασία αυτή χαρακτηρίζεται το κοινωνικό δίλημμα, δηλαδή οποιοδήποτε παίγνιο της μορφής $\begin{bmatrix} A_{1,1} & A_{1,2} \\ A_{2,1} & A_{2,2} \end{bmatrix}$, τιμές για τις οποίες ισχύει $ A_{1,2} < A_{2,2} < A_{1,1} < A_{2,1}$. Η επανάληψη του παιγνίου αυτού δημιουργεί ένα match μεταξύ στρατηγικών, matches μεταξύ στρατηγικών δημιουργούν τουρνουά μεταξύ στρατηγικών και ο υπολογισμός νέου πληθυσμού με βάση την επίδοση κάθε στρατηγικής στο τουρνουά αποτελεί το αντικείμενο μελέτης της εργασίας. 
+\section{Introduction}
+\subsection{Description of the problem}
+This is the report for the project of the course ``Game Theory'' of the Aristotle University of Thessaloniki. The subject of this project is the implementation and study of the Axelrod evolutionary tournament in the game "Prisoner's Dilemma." This name refers to a social dilemma, that is, any game of the form $\begin{bmatrix} R & S \\ T & P \end{bmatrix}$, where the following condition holds: $S < P < R < T$. Each player is given a choice, whether to cooperate or to defect. The payoff is calculated based on the player's move as well as the opponent's move; if both players cooperate, they each get R, if one cooperates and the other defects, the defector receives T and the cooperator receives S, otherwise if they both defect they both get rewarded P points. Paradoxically, a rational player may notice that no matter what the opponent plays, it is always better to defect, thus creating a Nash equilibrium (a game outcome that no player has motive to move away from) for two perfectly rational players in the ``Defect-Defect'' zone, making them both miss out on possible extra points, were they to cooperate. 
 
-Η εργασία αποτελείται από 4 βασικές συναρτήσεις, κάθε μία από τις οποίες επιτελεί μία συγκεκριμένη λειτουργία που μπορεί να χαρακτηριστεί από δύο χαρακτηριστικά της εκάστοτε παραδοχής: η φύση της προσομοίωσης (θεωρητική ή πραγματική) και η εξελικτική δυναμική (fitness ή imitation). Συγκεκριμένη εισαγωγή γίνεται και κατά την παρουσίαση της κάθε συνάρτησης, στην οποία εξηγείται ο τρόπος λειτουργίας και τυχούσες παραδοχές που συνέβησαν σε κάθε περίπτωση. Το πρώτο μέρος της εργασίας βασίζεται σε σημαντικό ποσοστό στη μελέτη των Mathieu et al. Μάλιστα, καταβλήθηκε προσπάθεια τα αποτελέσματα να είναι κατά το δυνατόν όμοια με αυτά που παρουσιάζει το paper του 1999.
+The repeated iteration of this game creates a match between strategies; multiple matches between strategies form a tournament, and the computation of a new population based on each strategy’s performance in the tournament constitutes the main focus of the study, an evolutionary tournament.
 
+The project consists of four main functions, each of which performs a specific task that can be characterized by two features of the respective assumption: the nature of the simulation (theoretical or real) and the evolutionary dynamic (fitness or imitation). Each function is introduced individually, with an explanation of its operation and any assumptions made in each case. The first part of the project is largely based on the study by Mathieu et al. In fact, an effort was made to replicate the results as closely as possible to those presented in their 1999 paper.
+
+For the study of the project, some concepts are crucial to understand. More specifically:
+\begin{enumerate}
+  \item A match is the base game played between two players, with a specified number of rounds (amount of times the players choose a move) which is unknown to the players.
+  \item A strategy is a specific algorithm followed by a player in order to calculate their next move in a match.
+  \item A population is the number of players following each strategy in a given tournament.
+  \item A tournament consists of all possible matches between each pair of players (a player does not play against themselves though).
+  \item An evolutionary game is the repetition of a tournament for a specified number of generations, where the population of each generation is calculated based on specified evolutionary dynamics.
+\end{enumerate}
+
+As mentioned above, the evolution dynamics studied in this project are the following:
+\begin{enumerate}
+  \item Fitness dynamics, where for each generation the number of players adopting each strategy is proportional to the performance (measured by a specific metric, in this case the total payoff in the tournament) of that strategy.
+  \item Imitation dynamics, where after each generation a specified number of players adopt the best strategy (calculated either as an Individual or as a Total, more on that on a later chapter) of the previous generation.
+\end{enumerate}
+
+\subsection{Related Work}
+The subject of the project was in large popularized by the famous Axelrod Tournament, where many famous game theorists were challenged to submit strategies for the Iterated Prisoner's Dilemma. The winning strategy ended up being the well-known Tit For Tat strategy, which, despite its simpleness, had many redeeming qualities; it was nice, meaning it was never the first to defect. It was retaliatory, meaning it was ready to counter attack if the opponent defects. It was also forgiving, meaning it did not hold a grudge too long; if an opponent defected but repented, Tit For Tat forgave them and continued to cooperate. Lastly, it was clear; it is not difficult for the opponent to understand the intentions of the strategy, thus making it more likely that cooperation occurs.
+
+Since 1980, when the tournament was held, a large number of studies have been published on the matter, a lot of which have focused on the evolutionary aspect of the tournament, trying to mimic the actual evolution of species in the animal kingdom, as well as the birth of cooperation between humans. One such paper was published in 1999 by Philippe Mathieu, Bruno Beaufils and Jean-Paul Delahaye with title ``Studies on Dynamics in the Classical Iterated Prisoner's Dilemma with Few Strategies''. In this specific paper, the evolutionary dynamics analyzed were Fitness Dynamics and the results aimed to showcase the different possible forms of dynamics that can occur and which aspects of the simulation they may depend on. As mentioned previously, the first part of this project is based exactly on that paper, aiming to recreate the results presented by Mathieu et al, as well as modifying the dynamics slightly to notice any differences in the resulting dynamics.
 \clearpage
+\section{Quickstart}
+
+TO DO: Add a quick start text as instructed.
 \section{Fitness Dynamics}
 
-Πρώτη εξελικτική δυναμική που θα αναλυθεί (και αυτή που αναλύεται από τους Mathieu et al.) είναι η δυναμική του fitness, σύμφωνα με την οποία ανατίθεται σε κάθε στρατηγική της προσομοίωσης ένα score, το οποίο χρησιμοποιείται ώστε να υπολογστεί η κατανομή του πληθυσμού της επόμενης γενιάς. Ακολουθείται και για τις δύο παρακάτω συναρτήσεις που αξιοποιούν το fitness η θεώρηση των Mathieu et al, σύμφωνα με την οποία το fitness κάθε στρατηγικής υπολογίζεται ως εξής: 
+The first evolutionary dynamics to be analyzed (and the one studied by Mathieu et al.) are the \textbf{Fitness Dynamics}, according to which each strategy in the simulation is assigned a score, which is then used to calculate the population distribution for the next generation. The approach followed in both functions that use fitness is that of Mathieu et al., where the fitness of each strategy is calculated as follows:
 
-Έστω ότι ο πληθυσμός απαρτίζεται από 3 στρατηγικές, την A, την B και την C. Υπολογίζονται με βάση τον πίνακα του παιγνίου B, τον αριθμό των γύρων κάθε αγώνα T και, προφανώς, των στρατηγικών που βρίσκονται "αντιμέτωπες" σε κάθε περίπτωση, οι απολαβές κάθε μίας από τις 2 στρατηγικές και αποθηκεύονται ως π.χ. V(A|B), η απολαβή της στρατηγικής A όταν συναντά την B. Έπειτα, το score κάθε παίκτη που χρησιμοποιεί την εκάστοτε στρατηγική (και άρα, ουσιαστικά, της στρατηγικής) υπολογίζεται ως, π.χ. για τη στρατηγική A, $g_n(A) = W_n(A)V(A|A) + W_n(B)V(A|B) + W_n(C)V(A|C) − V(A|A)$ , όπου $W_n(A), W_n(B), W_n(C)$ οι πληθυσμοί της εκάστοτε στρατηγικής στη γενιά $n$ (παρατηρήστε ότι αφαιρείται μία φορά η απολαβή για παιχνίδι με την ίδια στρατηγική του κάθε παίκτη, διότι θεωρείται ότι παραλείπεται το παιχνίδι με τον εαυτό του κάθε μέλους του πληθυσμού). Τέλος, το συνολικό score του τουρνουά υπολογίζεται ως $t(n) = W_n(A)g_n(A) + W_n(B)g_n(B) + W_n(C)g_n(C)$ και ο πληθυσμός της γενιάς $n+1$ για π.χ. τη στρατηγική A γίνεται $W_{n+1}(A) = \frac{\Pi W_n(A)g_n(A)}{t(n)}$. 
+Suppose the population consists of 3 strategies, A, B, and C. Based on the game matrix $B$, the number of rounds per match $T$, and, of course, the strategies that face each other in each case, the payoffs for each of the two strategies are calculated and stored as, for example, $V(A|B)$, the payoff of strategy A when it faces strategy B. Then, the score for each player using a given strategy (and thus, essentially, the score of the strategy itself) is calculated as, for example, for strategy A:
 
-Να επισημανθεί εδώ ότι η λογική αυτή εφαρμόζεται λόγω της πλήρους ντετερμινιστικής φύσης των στρατηγικών που έχουν υλοποιηθεί: εάν υπήρχαν στρατηγικές με τυχαίο στοιχείο, ο θεωρητικός υπολογισμός των αποτελεσμάτων κάθε αγώνα θα ήταν αδύνατος και θα έπρεπε να υπολογιστεί κάποια αναμενόμενη τιμή, αντικείμενο που ξεφεύγει από το αντικείμενο μελέτης της εργασίας.
-\subsection{Η συνάρτηση TourSimFit}
-Πρώτη συνάρτηση που υλοποιείται είναι η [POP,BST,FIT]\- =\- TourSimFit\- (B,\- Strategies,\- POP0,\- T, \-J,\- compensation), όπου B ο πίνακας απολαβών του παιγνίου, Strategies ένα array από Strings με τα ονόματα των στρατηγικών που συμμετέχουν στην προσομοίωση, POP0 ο αρχικός πληθυσμός, T ο αριθμός γύρων σε κάθε αγώνα και J ο αριθμός γενεών του εξελικτικού πρωταθλήματος. Επίσης, compensation είναι ένα έξτρα boolean όρισμα (η συνάρτηση μπορεί να κληθεί αγνοώντας την ύπαρξή του τελείως), η λειτουργία του οποίου περιγράφεται παρακάτω. Επιστρέφονται τα εξής: POP ένας πίνακας με τους πληθυσμούς κάθε στρατηγικής ανά γενεά, BST πίνακας που περιλαμβάνει τις καλύτερες στρατηγικές κάθε γύρου (0 αν δεν ανήκει στις καλύτερες, 1 αν ανήκει στις καλύτερες, οι ισοπαλίες μετράνε) και FIT ένας πίνακας με τα fitness scores κάθε στρατηγικής για κάθε γενεά. Η λογική της συνάρτησης ακολουθεί όσα παρουσιάστηκαν παραπάνω, όμως προστίθεται κατά τον υπολογισμό των πληθυσμών της επόμενης γενιάς λογική ώστε να αποφεύγεται η ύπαρξη δεκαδικών και ο πληθυσμός κάθε στρατηγικής σε κάθε γενιά να παραμένει ακέραιος. Η λογική λειτουργεί ως εξής:
+\[
+g_n(A) = W_n(A)V(A|A) + W_n(B)V(A|B) + W_n(C)V(A|C) - V(A|A)
+\]
 
-Λαμβάνεται ως αρχικό αποτέλεσμα των παραπάνω πράξεων για τον πληθυσμό το floor των δεκαδικών αποτελεσμάτων. Έπειτα, υπολογίζεται τυχόν έλλειμμα που προκύπτει από την εφαρμογή της συνάρτησης floor και ανατίθεται ένας ανά φορά νέος παίκτης σε κάποια στρατηγική τυχαία, μέχρις ότου να μηδενιστεί το έλλειμμα. Γίνεται και έλεγχος για το αν η στρατηγική βρίσκεται ήδη σε μηδενικό πληθυσμό, ώστε να αποφευχθεί η "αναγέννησή" της. Έτσι, ο συνολικός πληθυσμός των παικτών παραμένει σταθερός καθ' όλη τη διάρκεια της προσομοίωσης, όπως θεωρούν και οι Mathieu et al.
+where $W_n(A), W_n(B), W_n(C)$ are the population sizes of each strategy in generation $n$. (Note that the payoff for playing against one’s own strategy is subtracted once, because it is assumed that individuals do not play against themselves.)
 
-Η επιλογή αυτή γίνεται συνειδητά. Δοκιμάστηκαν οι περιπτώσεις κατά τις οποίες ανατίθεται κάθε παίκτης στη στρατηγική η οποία έχει πληθυσμό πιο κοντά στον επόμενο ακέραιο (π.χ. αν κάποια στρατηγική είχε αρχικά υπολογσιμένο πληθυσμό 199.8, αυτό να μετατραπεί σε 200), όπως και η ακριβώς αντίθετη περίπτωση, όπου δηλαδή ανατίθεται στη στρατηγική πιο μακριά από τον επόμενο ακέραιο. Οι αλγόριθμοι αυτοί παρουσίασαν μερικές ανεπιθύμητες συμπεριφορές διατήρησης ενός πολύ χαμηλού αριθμού παικτών συγκεκριμένων στρατηγικών (π.χ. κάποια στρατηγική να κολλάει σε πληθυσμό 2 επειδή ο αρχικά υπολογισμένος πληθυσμός επόμενης γενεάς είναι 1.8, ή αντίστοιχα π.χ. 1.1). Διατηρώντας αυτό το τυχαίο στοιχείο, τα αποτελέσματα των προσομοιώσεων δεν παρουσιάζουν σημαντική διαφορά με αυτά δίχως τυχαιότητα, ενώ παράλληλα η μέθοδος εγγυάται ότι σε βάθος χρόνου οι "αδύναμες" στρατηγικές εξαφανίζονται πλήρως.
+Finally, the total tournament score is calculated as:
 
-Παρατηρώντας, ωστόσο, την απόκλιση της υλοποίησης αυτής από τα αποτελέσματα του paper, προσθέσαμε την εξής μετατροπή: ένα έξτρα όρισμα τύπου boolean στη συνάρτηση TourSimFit, με την ονομασία compensation και default τιμή false, το οποίο επιτελεί τη λειτουργία που περιγράφεται παρακάτω. Με τιμή false, επιστρέφει τα αποτελέσματα μόνο με απλό rounding στον κοντινότερο μικρότερο ακέραιο (rounding προς τα κάτω), το οποίο θεωρούμε ότι γίνεται και στο paper. Στην περίπτωση αυτή, ο πληθυσμός ανά γενιά δεν παραμένει υποχρεωτικά σταθερός, αλλά η απόκλιση δεν αυξάνεται με προσθετικό τρόπο. Ίσως χάνονται απλά 1 ή 2 μέλη του πληθυσμού σε μερικές γενιές, λόγω του round down. Με τιμή true,  επιστρέφει τα αποτελέσματα σύμφωνα με τη λογική ανάθεσης των χαμένων μελών που περιγράφηκε παραπάνω. Στις προσομοιώσεις που ακολουθούν, παρουσιάζεται και μία σύγκριση των 2 αυτών μεθόδων με τα αποτελέσματα της συνάρτησης TourTheFit, που περιγράφεται παρακάτω. Θεωρήθηκε περιττή η προσθήκη των αποτελεσμάτων του paper.
+\[
+t(n) = W_n(A)g_n(A) + W_n(B)g_n(B) + W_n(C)g_n(C)
+\]
 
-\subsection{Η συνάρτηση TourTheFit}
-Η δεύτερη συνάρτηση που υλοποιήθηκε είναι η [POP,BST,FIT]\- =\- TourTheFit\- (B,\- Strategies,\- POP0,\- T,\- J), με ορίσματα και εξόδους παντελώς πανομοιότυπα με αυτά της προηγούμενης. Η μόνη ουσιαστική διαφορά κείτεται στο ότι πλέον, λόγω της θεωρητικής φύσης της προσομοίωσης, παραλείπεται το τμήμα του κώδικα που ήταν υπεύθυνο για τη διατήρηση ακεραίων στον πληθυσμό, καθώς επιτρέπονται και οι δεκαδικοί αριθμοί, αφού ο πληθυσμός δεν αποτελείται πραγματικά από παίκτες.
+and the population in generation $n+1$ for strategy A becomes:
 
-\subsection{Προσομοίωσεις}
-Παρακάτω ακολουθούν οι προσομοιώσεις για την περίπτωση των fitness dy\-na\-mics, οι οποίες ακολουθούν κατά πολύ τη λογική των Mathieu et al. Στόχος ήταν να επιτευχθεί όσο το δυνατόν πιστή αντιγραφή των αποτελεσμάτων που παρουσιάζονται στο paper. Για τον σκοπό αυτό, ως default τιμή του πίνακα απολαβών χρησιμοποιήθηκε $B = \begin{bmatrix} 3 & 0 \\5 & 1 \end{bmatrix}$ και προστέθηκαν στη λίστα των 12 στρατηγικών που είχαν έως τώρα υλοποιηθεί οι στρατηγικές per\_ccd, per\_ddc, soft\_majo και per\_ccccd, οι οποίες χρησιμοποιούνται στο paper. Η κάθε προσομοίωση βρίσκεται στο αρχείο example.m σε κατάλληλο Section και με Run Section προκύπτουν ακριβώς τα αποτελέσματα που παρουσιάζονται παρακάτω.
-\subsubsection{1η Προσομοίωση - Defectors may be strong}
-Ήδη από την πρώτη προσομοίωση \ref{fig:Defectors may be strong}, παρουσιάζεται ένα ενδιαφέρον αποτέλεσμα. Σκοπός της προσομοίωσης αυτής είναι να αναδείξει ότι σε συγκεκριμένα σύνολα στρατηγικών και βολικές αρχικές τιμές πληθυσμού, λιποτακτικές στρατηγικές όπως η per\_ddc είναι ικανές να κυριαρχήσουν. Ωστόσο, η θεωρητική ανάλυση της περίπτωσης που μελετάται στο paper δε δείχνει ακριβώς αυτήν την εικόνα. Αυτό οφείλεται στο γεγονός ότι ο πληθυσμός soft\_majo στις περιπτώσεις των προσομοιώσεων εξαφανίζεται εντελώς περίπου στην 20η γενιά, ενώ στη θεωρητική περίπτωση αυτό δε συμβαίνει. Έτσι, μετά από κάποια γενιά και μία σχετική μείωση του πληθυσμού per\_ddc, επιστρέφει η στρατηγική soft\_majo και αναπτύσσεται η στρατηγική Alternator, που ουσιαστικά είναι και ο τέλειος αντίπαλος της soft\_majo, διότι διαπράττει ακριβώς όσες λιποταξίες μπορεί για να διατηρήσει τη soft\_majo σε συνεργασία. Μετά από ένα σημείο, βέβαια, αρχίζουν και πάλι οι 2 πληθυσμοί αυτοί να μειώνονται και να αυξάνεται ο πληθυσμός των per\_ddc, κάτι που μας κάνει να υποψιαζόμαστε ότι το παράδειγμα αυτό θεωρητικά οδηγείται σε ταλάντωση. Στις προσομοιώσεις, όμως, και στην περίπτωση του compensation και στην άλλη, τα αποτελέσματα είναι πολύ παρόμοια με αυτά του paper: η ελαφριά διαφοροποίηση στην περίπτωση του compensation οφείλεται στο τυχαίο στοιχείο, το οποίο κάνει την καμπύλη να φαίνεται λιγότερο λεία από την περίπτωση δίχως compensation.
+\[
+W_{n+1}(A) = \frac{\Pi W_n(A)g_n(A)}{t(n)}
+\]
+
+It should be emphasized that this logic is applied due to the fully deterministic nature of the implemented strategies. If there were strategies with random elements, the theoretical calculation of the outcome of each match would be impossible, and one would instead need to compute some expected value---something that falls outside the scope of this study.
+\subsection{The function TourSimFit}
+The first function implemented is \texttt{[POP, BST, FIT] = TourSimFit(B, Strategies, POP0, T, J, compensation)}, where $B$ is the payoff matrix of the game, \texttt{Strategies} is an array of strings with the names of the strategies participating in the simulation, \texttt{POP0} is the initial population, $T$ is the number of rounds in each match, and $J$ is the number of generations of the evolutionary tournament. Additionally, \texttt{compensation} is an optional boolean argument (the function can be called without including it), whose function is described below. The function returns the following:
+
+\begin{itemize}
+    \item \texttt{POP}: a matrix with the population of each strategy per generation,
+    \item \texttt{BST}: a matrix indicating the best strategies in each round (0 if not among the best, 1 if among the best — ties are counted),
+    \item \texttt{FIT}: a matrix with the fitness scores of each strategy for each generation.
+\end{itemize}
+
+The logic of the function follows what was presented earlier, but an additional mechanism is added during the computation of the next generation’s populations to avoid decimal values and ensure that the population for each strategy in each generation remains an integer. The logic works as follows:
+
+The initial result of the population computations is taken as the \texttt{floor} of the decimal values. Then, any deficit that arises from applying the floor function is computed, and one new player at a time is randomly assigned to some strategy, until the deficit is eliminated. A check is also performed to ensure that the strategy does not already have a population of zero, to avoid its "revival." In this way, the total player population remains constant throughout the simulation, as is assumed by Mathieu et al.
+
+This choice is deliberate. Cases were tested in which each player was assigned to the strategy whose calculated population was closest to the next integer (e.g., if a strategy had an initial computed population of 199.8, it would be rounded to 200), as well as the opposite case, where players were assigned to the strategy furthest from the next integer. These algorithms showed some undesirable behaviors, such as maintaining a very small number of players in certain strategies (e.g., a strategy remaining stuck at population 2 because the next generation’s computed population is 1.8, or 1.1 respectively). By preserving this random element, the simulation results do not differ significantly from those without randomness, while the method guarantees that weaker strategies are completely eliminated over time.
+
+However, observing the deviation of this implementation from the results in the paper, we added the following adjustment: an extra boolean argument in the function \texttt{TourSimFit}, named \texttt{compensation} with default value \texttt{false}, which performs the functionality described below. With value \texttt{false}, it returns results using only simple rounding to the nearest lower integer (floor rounding), which we believe is also the method used in the paper. In this case, the population per generation is not necessarily constant, but the deviation does not increase additively — perhaps just 1 or 2 individuals are lost in some generations due to rounding down. With value \texttt{true}, it returns results according to the player-reassignment logic described earlier. Below the main loop for the tournament simulation, including the possible compensation of the deficiency in the population, is presented with pseudocode.
+
+\begin{algorithm}
+\caption{TourSimFit Simulation}
+\begin{algorithmic}[1]
+\FOR{$i = 1$ to $J$}
+    \FOR{$j = 1$ to $N_{\text{strat}}$}
+        \STATE $FIT[i][j] \gets 0$
+        \FOR{$k = 1$ to $N_{\text{strat}}$}
+            \STATE $FIT[i][j] \gets FIT[i][j] + \text{payoff}[j][k] \cdot POP[i][k]$
+        \ENDFOR
+        \STATE $FIT[i][j] \gets FIT[i][j] - \text{payoff}[j][j]$
+    \ENDFOR
+
+    \STATE $maxVal \gets \max(FIT[i][:])$
+    \STATE $allMaxIndices \gets \{j \mid FIT[i][j] = maxVal\}$
+    \FORALL{$j \in allMaxIndices$}
+        \STATE $BST[i][j] \gets 1$
+    \ENDFOR
+
+    \STATE $total\_each \gets POP[i][:] \cdot FIT[i][:]$ \COMMENT{Element-wise multiplication}
+    \STATE $total \gets \sum total\_each$
+
+    \FOR{$j = 1$ to $N_{\text{strat}}$}
+        \STATE $POP[i+1][j] \gets \left\lfloor POP[i][j] \cdot \dfrac{FIT[i][j]}{total} \cdot N \right\rfloor$
+    \ENDFOR
+
+    \IF{$compensation$ is \textbf{true}}
+        \STATE $N_{new} \gets \sum POP[i+1][:]$
+        \STATE $deficiency \gets N - N_{new}$
+        \WHILE{$deficiency > 0$}
+            \STATE $k \gets \text{random integer in } [1, N_{\text{strat}}]$
+            \IF{$POP[i][k] = 0$}
+                \STATE \textbf{continue}
+            \ENDIF
+            \STATE $POP[i+1][k] \gets POP[i+1][k] + 1$
+            \STATE $deficiency \gets deficiency - 1$
+        \ENDWHILE
+    \ENDIF
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+In the simulations that follow, a comparison is also presented between these two methods and the results of the function \texttt{TourTheFit}, which is described below. Including the results from the paper was deemed unnecessary.
+
+
+\subsection{The function TourTheFit}
+The second function implemented is [POP,BST,FIT]\- =\- TourTheFit\- (B,\- Strategies,\- POP0,\- T,\- J), with arguments and outputs entirely identical to those of the previous one. The only substantial difference lies in the fact that now, due to the theoretical nature of the simulation, the part of the code responsible for maintaining integer values in the population is omitted, since decimal numbers are allowed, as the population does not actually consist of individual players. Below, the main loop of the evolutionary tournament is presented via pseudocode.
+
+\begin{algorithm}
+\caption{TourTheFit Simulation}
+\begin{algorithmic}[1]
+\FOR{$i = 1$ to $J$}
+    \FOR{$j = 1$ to $N_{\text{strat}}$}
+        \STATE $FIT[i][j] \gets 0$
+        \FOR{$k = 1$ to $N_{\text{strat}}$}
+            \STATE $FIT[i][j] \gets FIT[i][j] + \text{payoff}[j][k] \cdot POP[i][k]$
+        \ENDFOR
+        \STATE $FIT[i][j] \gets FIT[i][j] - \text{payoff}[j][j]$
+    \ENDFOR
+
+    \STATE $maxVal \gets \max(FIT[i][:])$
+    \STATE $allMaxIndices \gets \{j \mid FIT[i][j] = maxVal\}$
+    \FORALL{$j \in allMaxIndices$}
+        \STATE $BST[i][j] \gets 1$
+    \ENDFOR
+
+    \STATE $total\_each \gets POP[i][:] \cdot FIT[i][:]$ \COMMENT{Element-wise multiplication}
+    \STATE $total \gets \sum total\_each$
+
+    \FOR{$j = 1$ to $N_{\text{strat}}$}
+        \STATE $POP[i+1][j] \gets POP[i][j] \cdot \dfrac{FIT[i][j]}{total} \cdot N$
+    \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Simulations - Examples}
+From this point on, the simulations of the fitness dynamics are presented, using the functions discussed above. Each plot presented is created by the corresponding example referenced in the text, contained in the Examples folder of the GitHub repository. For a more detailed description of each call and the parameters used in each example, please refer to the Documentation.pdf file contained in the Documentation folder of the repository, as well as the actual source code of each example. Along with the plots created by the functions described, the plots of the original 1999 paper by Mathieu et al are presented, so as to allow direct comparison and discussion of every example. 
+\subsubsection{1st Simulation - Defectors may be strong}
+Already from the first simulation (Figure~\ref{fig:Defectors may be strong}), an interesting result emerges. The purpose of this simulation is to demonstrate that, in specific sets of strategies and favorable initial population values, defecting strategies such as \texttt{per\_ddc} are capable of dominating. However, the theoretical analysis of the scenario studied in the paper does not present exactly the same picture. This is due to the fact that the population of \texttt{soft\_majo} in the simulation cases completely disappears around the 20th generation, whereas in the theoretical case, this does not occur. Thus, after a few generations and a relative decrease in the population of \texttt{per\_ddc}, the strategy \texttt{soft\_majo} returns and the strategy \texttt{Alternator} develops, which is essentially the perfect opponent of \texttt{soft\_majo}, as it defects exactly as much as necessary to keep \texttt{soft\_majo} cooperating. After a certain point, of course, both of these populations begin to decline again, while the population of \texttt{per\_ddc} increases, which leads us to suspect that this example theoretically results in oscillation. In the simulations, however---in both the \texttt{compensation} case and the one without it---the results are very similar to those in the paper: the slight variation in the \texttt{compensation} case is due to the stochastic element, which makes the curve appear less smooth than in the case without \texttt{compensation}. Run example01 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+
 	\begin{figure}[h]
 	      \centering
 	      \includegraphics[scale=0.8]{Defectors may be strong.pdf}
 	      \caption{Defectors may be strong}
 	      \label{fig:Defectors may be strong}
 	\end{figure}
-\subsubsection{2η Προσομοίωση - Μονότονη Σύγκλιση}
-Στο εξής παρουσιάζονται τα αποτελέσματα για τις προσομοιώσεις που χρησιμοποιούν οι Mathieu et al ώστε να ταξινομήσουν τα γραφήματα σε 5 κατηγορίες, η πρώτη \ref{fig:Monotonous Convergence} από τις οποίες είναι η μονότονη σύγκλιση των πληθυσμών. Πρόκειται για την πιο συχνή μορφή που προκύπτει, καθώς οι ταλαντώσεις που παρουσιάζονται παρακάτω είναι αρκετά ευαίσθητες ως προς τις αρχικές συνθήκες. Τα αποτελέσματα τόσο της θεωρητικής ανάλυσης όσο και των 2 προσομοιώσεων είναι πανομοιότυπα με αυτά των Mathieu et al, με μοναδική διαφορά τον ελάχιστα διαφορετικό τελικό πληθυσμό στην περίπτωση του compensation, που οφείλεται και πάλι στο τυχαίο στοιχείο. Η κατάταξη, ωστόσο, των στρατηγικών παραμένει ίδια.
+\subsubsection{2nd Simulation - Monotonous Convergence}
+From now on, the results are presented for the simulations used by Mathieu et al. to classify the graphs into 5 categories, the first of which (Figure~\ref{fig:Monotonous Convergence}) is the monotonous convergence of populations. This is the most common form that emerges, as the oscillations presented below are quite sensitive to initial conditions. The results of both the theoretical analysis and the two simulations are identical to those of Mathieu et al., with the only difference being a slightly different final population in the case of \texttt{compensation}, which is again due to the stochastic element. However, the ranking of the strategies remains the same. Run example02 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+
 	\begin{figure}[h]
 	      \centering
 	      \includegraphics[scale=0.8]{Monotonous Convergence.pdf}
 	      \caption{Monotonous Convergence}
 	      \label{fig:Monotonous Convergence}
 	\end{figure}
-\subsubsection{3η Προσομοίωση - Φθίνουσες Ταλαντώσεις}
-Η επόμενη κατηγορία αποτελεσμάτων του paper είναι η φθίνουσες ταλαντώσεις πληθυσμών \ref{fig:Φθίνουσες Ταλαντώσεις}. Τα αποτελέσματα σε αυτήν την περίπτωση είναι πανομοιότυπα με αυτά των Mathieu et al και για τις τρεις περιπτώσεις που παρουσιάζονται. Οι αρχικοί πληθυσμοί στη συγκεκριμένη περίπτωση είναι αρκετά μεγάλοι, οπότε ο ένας ή δύο παίκτες που αντίθενται τυχαία στην περίπτωση του compensation δεν αλλάζουν αισθητά την πορεία της συνάρτησης.
+\subsubsection{3rd Simulation - Attenuated Oscillatory movements}
+The next category of results from the paper is the diminishing oscillations of populations (Figure~\ref{fig:Attenuated oscillatory movements}). The results in this case are identical to those of Mathieu et al. for all three cases presented. The initial populations in this particular case are quite large, so the one or two players that randomly oppose in the \texttt{compensation} scenario do not significantly affect the trajectory of the function. Run example03 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+
 	\begin{figure}[h]
 	      \centering
 	      \includegraphics[scale=0.8]{Attenuated oscillatory movements.pdf}
 	      \caption{Attenuated oscillatory movements}
-	      \label{fig:Φθίνουσες Ταλαντώσεις}
+	      \label{fig:Attenuated oscillatory movements}
 	\end{figure}
-\subsubsection{4η Προσομοίωση - Περιοδικές Κινήσεις}
-Τρίτη περίπτωση είναι η εμφάνιση περιοδικών κινήσεων/ταλαντώσεων \ref{fig:Περιοδικές Κινήσεις}, δίχως αύξηση ή μείωση των πλατών των ταλαντώσεων. Η εικόνα αυτή παρουσιάζεται σε γενικές γραμμές όταν υπάρχουν 3 στρατηγικές με τη λογική "πέτρα-ψαλίδι-χαρτί": η 1η "νικάει" τη 2η που "νικάει" την 3η που "νικάει" την 1η. Στη συγκεκριμένη περίπτωση, η per\_ccd νικάει τη soft\_majo που νικάει την per\_ddc που νικάει τη per\_ccd. Με κατάλληλους, λοιπόν, αρχικούς πληθυσμούς παρατηρούνται τα παρακάτω αποτελέσματα. Η θεωρητική ανάλυση δείχνει ότι η ταλάντωση στην πραγματικότητα σβήνει - πρόκειται για φθίνουσα ταλάντωση όπως πριν. Αυτό οφείλεται στο γεγονός ότι σε διακριτές περιπτώσεις, όπως αυτές των προσομοιώσεων, γίνεται βέβαιο με κατάλληλες επιλογές ότι θα βρεθούμε σε κατάσταση ίδια με παρελθοντική, και άρα ότι θα υπάρξει επανάληψη/ταλάντωση. Ωστόσο, στη θεωρητική ανάλυση, αυτό δε συμβαίνει ("απειρία" καταστάσεων λόγω της αριθμητικής με δεκαδικούς), και άρα παρατηρείται η απόσβεση της ταλάντωσης. Η TourSimFit χωρίς compensation αποφέρει πάλι ίδια αποτελέσματα με τους Mathieu et al, ενώ η περίπτωση με compensation, αν και αντιαισθητική στην όψη, αποτυπώνει επίσης την ταλάντωση, ακόμα και με την αισθητή ύπαρξη θορύβου λόγω της τυχαιότητας (τα πλάτη των ταλαντώσεων είναι μικρά, άρα ακόμα και η προσθήκη ενός ή δύο έξτρα παικτών έχει αισθητό αποτέλεσμα).
+\subsubsection{4th Simulation - Periodic movements}
+The third case is the appearance of periodic movements/oscillations (Figure~\ref{fig:Periodic movements}), without an increase or decrease in the amplitude of the oscillations. This behavior generally appears when there are three strategies with a "rock-paper-scissors" logic: the 1st "beats" the 2nd, which "beats" the 3rd, which in turn "beats" the 1st. In this particular case, \texttt{per\_ccd} beats \texttt{soft\_majo}, which beats \texttt{per\_ddc}, which beats \texttt{per\_ccd}. With appropriate initial populations, the following results are observed. The theoretical analysis shows that the oscillation actually fades — it is a diminishing oscillation as before. This is due to the fact that in discrete cases, such as these simulations, it becomes certain through suitable choices that the system will return to a previous state, and thus repetition/oscillation will occur. However, in the theoretical analysis, this does not happen (due to the "infinity" of states because of decimal numerics), and thus the oscillation is damped. The \texttt{TourSimFit} function without \texttt{compensation} again yields results identical to those of Mathieu et al., while the case with \texttt{compensation}, although visually less appealing, also captures the oscillation, even with noticeable noise due to randomness (the amplitudes of the oscillations are small, so even the addition of one or two extra players has a noticeable effect). Run example04 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+
 	\begin{figure}[h]
 	      \centering
 	      \includegraphics[scale=0.8]{Periodic movements.pdf}
 	      \caption{Periodic movements}
-	      \label{fig:Περιοδικές Κινήσεις}
+	      \label{fig:Periodic movements}
 	\end{figure}
-\subsubsection{5η Προσομοίωση - Αύξουσες Ταλαντώσεις}
-Από τις πλέον μη αναμενόμενες περιπτώσεις είναι αυτή των αυξουσών ταλαντώσεων \ref{fig:Αύξουσες Ταλαντώσεις}. Με κατάλληλη επιλογή πίνακα απολαβής, στρατηγικών και αρχικών πληθυσμών, είναι δυνατόν να παρατηρηθεί το φαινόμενο αυτό. Δοκιμάστηκε ο πληθυσμός ως έχει και τα αποτελέσματα δεν ήταν τα επιθυμητά. Έτσι, μεταβλήθηκε ο πίνακας απολαβών σε $B = \begin{bmatrix} 3 & 0 \\4.72 & 1 \end{bmatrix}$ (με δοκιμή και σφάλμα, γνωρίζοντας τη γενική κατεύθυνση στην οποία έπρεπε να κινηθεί ο πίνακας) και τελικά παρατηρήθηκε στην περίπτωση TourSimFit χωρίς compensation αποτέλεσμα πολύ όμοιο με αυτό του paper. Ωστόσο, για την ίδια τιμή του $B$ και τις περιπτώσεις της TourTheFit και TourSimFit με compensation παρατηρούνται ελαφρώς φθίνουσες ταλαντώσεις, κάτι που φανερώνει δύο αλήθειες για τις περιπτώσεις των αυξουσών ταλαντώσεων. Πρώτον, προκύπτουν από πληθυσμούς που δύνανται να εμφανίσουν κανονικές ταλαντώσεις, με κατάλληλη μεταβολή του πίνακα κερδών. Δεύτερον, είναι ιδιαίτερα ευαίσθητες περιπτώσεις που με ακόμα και ελάχιστη μετατροπή της δυναμικής (όπως π.χ. τη λογική του compensation) καταρρέουν πίσω σε κανονική ή φθίνουσα ταλάντωση. Πολύ πιθανόν για κατάλληλη επιλογή του $B$ να μετατρέπονται και οι περιπτώσεις TourTheFit και TourSimFit με compensation σε αύξουσα ταλάντωση, αλλά κρίθηκε πιο σημαντικό για την εργασία να παρουσιαστεί αυτή η απόκλιση στα αποτελέσματα.
+\subsubsection{5th Simulation - Increasing oscillations}
+One of the most unexpected cases is that of increasing oscillations (Figure~\ref{fig:Increasing oscillations}). With an appropriate choice of the payoff matrix, strategies, and initial populations, this phenomenon can be observed. The population was initially tested as is, but the results were not satisfactory. Therefore, the payoff matrix was changed to 
+\[
+B = \begin{bmatrix} 3 & 0 \\ 4.72 & 1 \end{bmatrix}
+\]
+(using trial and error, knowing the general direction in which the matrix needed to be changed towards), and eventually, a result very similar to that of the paper was observed in the case of \texttt{TourSimFit} without \texttt{compensation}. However, for the same value of \( B \) and the cases of \texttt{TourTheFit} and \texttt{TourSimFit} with \texttt{compensation}, slightly diminishing oscillations are observed, revealing two truths about the cases of increasing oscillations. First, they arise from populations capable of exhibiting normal oscillations, with a suitable modification of the payoff matrix. Second, they are particularly sensitive cases that collapse back into normal or diminishing oscillations with even a slight modification of the dynamics (such as the logic of \texttt{compensation}). It is quite possible that for an appropriate choice of \( B \), the cases of \texttt{TourTheFit} and \texttt{TourSimFit} with \texttt{compensation} could also transform into increasing oscillations, but it was considered more important for this work to present this divergence in the results. Run example05 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+
 	\begin{figure}[h]
 	      \centering
 	      \includegraphics[scale=0.8]{Increasing oscillations.pdf}
 	      \caption{Increasing oscillations}
-	      \label{fig:Αύξουσες Ταλαντώσεις}
+	      \label{fig:Increasing oscillations}
 	\end{figure}
-\subsubsection{6η Προσομοίωση - Χάος/Διαταραγμένες Ταλαντώσεις}
-Τελευταία περίπτωση που παρουσιάζεται στο paper είναι αυτή των διαταραγμένων ταλαντώσεων \ref{fig:Χάος/Διαταραγμένες Ταλαντώσεις}. Οι συγγραφείς του paper ορθά διστάζουν να τη χαρακτηρίσουν ως πραγματικά χαοτική περίπτωση, διότι, λόγω της διακριτής φύσης της προσομοίωσης, κάθε τέτοια συμπεριφορά μετά από ικανό αριθμό γενεών είτε φτάνει σε ισορροπία είτε απλώς επαναλαμβάνεται. Τα αποτελέσματα, βέβαια, της συγκεκριμένης προσομοίωσης, μοιάζουν αρκετά χαοτικά στο μάτι. Πάλι, η περίπτωση TourSimFit δίχως compensation ανταποκρίνεται πλήρως στα αποτελέσματα του paper. Αντιθέτως, λόγω πάλι της ευαισθησίας του φαινομένου, οι περιπτώσεις της θεωρητικής ανάλυσης και της πραγματικής προσομοίωσης με compensation διαφοροποιούνται σημαντικά, διότι δεν εμφανίζουν τη χαώδη συμπεριφορά γύρω στη γενιά 140 όπως στην περίπτωση του paper. Ωστόσο, προβλέπουν την παραμονή στη ζωή των στρατηγικών per\_ccccd και Prober, αλλά και τις τιμές στις οποίες φαίνεται να τείνουν οι πληθυσμοί της περίπτωσης TourSimFit χωρίς προσομοίωση.
+\subsubsection{6th Simulation - Chaos/Disordered oscillations}
+The last case presented in the paper is that of disordered oscillations (Figure~\ref{fig:Disordered oscillations}). The authors of the paper rightly hesitate to characterize it as a truly chaotic case because, due to the discrete nature of the simulation, any such behavior after a sufficient number of generations either reaches equilibrium or simply repeats. However, the results of this particular simulation appear quite chaotic to the eye. Again, the case of \texttt{TourSimFit} without \texttt{compensation} fully matches the results of the paper. In contrast, due to the sensitivity of the phenomenon, the cases of the theoretical analysis and the actual simulation with \texttt{compensation} differ significantly, as they do not exhibit the chaotic behavior around generation 140 as in the case of the paper. Nevertheless, they predict the survival of the \texttt{per\_ccccd} and \texttt{Prober} strategies, as well as the values toward which the populations in the \texttt{TourSimFit} case without simulation seem to tend. Run example06 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+
 	\begin{figure}[h]
 	      \centering
 	      \includegraphics[scale=0.8]{Disordered oscillations.pdf}
 	      \caption{Disordered oscillations}
-	      \label{fig:Χάος/Διαταραγμένες Ταλαντώσεις}
+	      \label{fig:Disordered oscillations}
 	\end{figure}
+
+\subsubsection{7th Simulation - Sensitivity of dynamics to population's size - First Simulation}
+
+\subsubsection{8th Simulation - Sensitivity of dynamics to population's size - Second Simulation}
+
+\subsubsection{9th Simulation - Sensitivity of winner to population's size - First Simulation}
+
+\subsubsection{10th Simulation - Sensitivity of winner to population's size - Second Simulation}
+
+\subsubsection{11th Simulation - Sensitivity to game length - First Simulation}
+
+\subsubsection{12th Simulation - Sensitivity to game length - Second Simulation}
+
+\subsubsection{13th Simulation - Sensitivity to CIPD payoff - First Simulation}
+
+\subsubsection{14th Simulation - Sensitivity to CIPD payoff - Second Simulation}
+
+\subsubsection{15th Simulation - Sensitivity to repartition computation method - First Simulation}
+
+\subsubsection{16th Simulation - Sensitivity to repartition computation method - Second Simulation}
+
+\subsubsection{17th Simulation - Sensitivity to repartition computation method - Third Simulation}
 
 \clearpage
 \section{Imitation Dynamics}
