@@ -264,31 +264,31 @@ Already from the first simulation (Figure~\ref{fig:Defectors may be strong}), an
 From now on, the results are presented for the simulations used by Mathieu et al. to classify the graphs into 5 categories, the first of which (Figure~\ref{fig:Monotonous Convergence}) is the monotonous convergence of populations. This is the most common form that emerges, as the oscillations presented below are quite sensitive to initial conditions. The results of both the theoretical analysis and the two simulations are identical to those of Mathieu et al., with the only difference being a slightly different final population in the case of \texttt{compensation}, which is again due to the stochastic element. However, the ranking of the strategies remains the same. Run example02 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
-	      \centering
-		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig2.jpeg}\par\vspace{0.5em}
-	      \includegraphics[width=0.7\textwidth]{Monotonous Convergence.pdf}
-	      \caption{2nd Simulation - Monotonous Convergence}
-	      \label{fig:Monotonous Convergence}
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig2.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Monotonous Convergence.pdf}
+	    \caption{2nd Simulation - Monotonous Convergence}
+	    \label{fig:Monotonous Convergence}
 	\end{figure}
 \subsubsection{3rd Simulation - Attenuated Oscillatory movements}
 The next category of results from the paper is the diminishing oscillations of populations (Figure~\ref{fig:Attenuated oscillatory movements}). The results in this case are identical to those of Mathieu et al. for all three cases presented. The initial populations in this particular case are quite large, so the one or two players that randomly oppose in the \texttt{compensation} scenario do not significantly affect the trajectory of the function. Run example03 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
-	      \centering
-		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig3.jpeg}\par\vspace{0.5em}
-	      \includegraphics[width=0.7\textwidth]{Attenuated oscillatory movements.pdf}
-	      \caption{3rd Simulation - Attenuated oscillatory movements}
-	      \label{fig:Attenuated oscillatory movements}
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig3.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Attenuated oscillatory movements.pdf}
+	    \caption{3rd Simulation - Attenuated oscillatory movements}
+	    \label{fig:Attenuated oscillatory movements}
 	\end{figure}
 \subsubsection{4th Simulation - Periodic movements}
 The third case is the appearance of periodic movements/oscillations (Figure~\ref{fig:Periodic movements}), without an increase or decrease in the amplitude of the oscillations. This behavior generally appears when there are three strategies with a "rock-paper-scissors" logic: the 1st "beats" the 2nd, which "beats" the 3rd, which in turn "beats" the 1st. In this particular case, \texttt{per\_ccd} beats \texttt{soft\_majo}, which beats \texttt{per\_ddc}, which beats \texttt{per\_ccd}. With appropriate initial populations, the following results are observed. The theoretical analysis shows that the oscillation actually fades — it is a diminishing oscillation as before. This is due to the fact that in discrete cases, such as these simulations, it becomes certain through suitable choices that the system will return to a previous state, and thus repetition/oscillation will occur. However, in the theoretical analysis, this does not happen (due to the "infinity" of states because of decimal numerics), and thus the oscillation is damped. The \texttt{TourSimFit} function without \texttt{compensation} again yields results identical to those of Mathieu et al., while the case with \texttt{compensation}, although visually less appealing, also captures the oscillation, even with noticeable noise due to randomness (the amplitudes of the oscillations are small, so even the addition of one or two extra players has a noticeable effect). Run example04 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
-	      \centering
-		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig4.jpeg}\par\vspace{0.5em}
-	      \includegraphics[width=0.7\textwidth]{Periodic movements.pdf}
-	      \caption{4th Simulation - Periodic movements}
-	      \label{fig:Periodic movements}
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig4.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Periodic movements.pdf}
+	    \caption{4th Simulation - Periodic movements}
+	    \label{fig:Periodic movements}
 	\end{figure}
 \subsubsection{5th Simulation - Increasing oscillations}
 One of the most unexpected cases is that of increasing oscillations (Figure~\ref{fig:Increasing oscillations}). With an appropriate choice of the payoff matrix, strategies, and initial populations, this phenomenon can be observed. The population was initially tested as is, but the results were not satisfactory. Therefore, the payoff matrix was changed to 
@@ -298,45 +298,112 @@ B = \begin{bmatrix} 3 & 0 \\ 4.72 & 1 \end{bmatrix}
 (using trial and error, knowing the general direction in which the matrix needed to be changed towards), and eventually, a result very similar to that of the paper was observed in the case of \texttt{TourSimFit} without \texttt{compensation}. However, for the same value of \( B \) and the cases of \texttt{TourTheFit} and \texttt{TourSimFit} with \texttt{compensation}, slightly diminishing oscillations are observed, revealing two truths about the cases of increasing oscillations. First, they arise from populations capable of exhibiting normal oscillations, with a suitable modification of the payoff matrix. Second, they are particularly sensitive cases that collapse back into normal or diminishing oscillations with even a slight modification of the dynamics (such as the logic of \texttt{compensation}). It is quite possible that for an appropriate choice of \( B \), the cases of \texttt{TourTheFit} and \texttt{TourSimFit} with \texttt{compensation} could also transform into increasing oscillations, but it was considered more important for this work to present this divergence in the results. Run example05 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
-	      \centering
-		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig5.jpeg}\par\vspace{0.5em}
-	      \includegraphics[width=0.7\textwidth]{Increasing oscillations.pdf}
-	      \caption{5th Simulation - Increasing oscillations}
-	      \label{fig:Increasing oscillations}
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig5.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Increasing oscillations.pdf}
+	    \caption{5th Simulation - Increasing oscillations}
+	    \label{fig:Increasing oscillations}
 	\end{figure}
 \subsubsection{6th Simulation - Chaos/Disordered oscillations}
 The last case presented in the paper is that of disordered oscillations (Figure~\ref{fig:Disordered oscillations}). The authors of the paper rightly hesitate to characterize it as a truly chaotic case because, due to the discrete nature of the simulation, any such behavior after a sufficient number of generations either reaches equilibrium or simply repeats. However, the results of this particular simulation appear quite chaotic to the eye. Again, the case of \texttt{TourSimFit} without \texttt{compensation} fully matches the results of the paper. In contrast, due to the sensitivity of the phenomenon, the cases of the theoretical analysis and the actual simulation with \texttt{compensation} differ significantly, as they do not exhibit the chaotic behavior around generation 140 as in the case of the paper. Nevertheless, they predict the survival of the \texttt{per\_ccccd} and \texttt{Prober} strategies, as well as the values toward which the populations in the \texttt{TourSimFit} case without simulation seem to tend. Run example06 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
-	      \centering
-		  \includegraphics[width=0.7\textwidth]{RefPaperFigures/fig6.jpeg}\par\vspace{0.5em}
-	      \includegraphics[width=0.7\textwidth]{Disordered oscillations.pdf}
-	      \caption{6th Simulation - Disordered oscillations}
-	      \label{fig:Disordered oscillations}
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig6.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Disordered oscillations.pdf}
+	    \caption{6th Simulation - Disordered oscillations}
+	    \label{fig:Disordered oscillations}
 	\end{figure}
 
 \subsubsection{7th Simulation - Sensitivity of dynamics to population's size - First Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig7a.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity of dynamics to population's size - First Simulation.pdf}
+	    \caption{7th Simulation - Sensitivity of dynamics to population's size - First Simulation}
+	    \label{fig:Sensitivity of dynamics to population's size - First Simulation}
+	\end{figure}
 \subsubsection{8th Simulation - Sensitivity of dynamics to population's size - Second Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig7b.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity of dynamics to population's size - Second Simulation.pdf}
+	    \caption{8th Simulation - Sensitivity of dynamics to population's size - Second Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{9th Simulation - Sensitivity of winner to population's size - First Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig8a.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity of winner to population's size - First Simulation.pdf}
+	    \caption{9th Simulation - Sensitivity of winner to population's size - First Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{10th Simulation - Sensitivity of winner to population's size - Second Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig8b.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity of winner to population's size - Second Simulation.pdf}
+	    \caption{10th Simulation - Sensitivity of winner to population's size - Second Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{11th Simulation - Sensitivity to game length - First Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig9a.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity to game length - First Simulation.pdf}
+	    \caption{11th Simulation - Sensitivity to game length - First Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{12th Simulation - Sensitivity to game length - Second Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig9b.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity to game length - Second Simulation.pdf}
+	    \caption{12th Simulation - Sensitivity to game length - Second Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{13th Simulation - Sensitivity to CIPD payoff - First Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig10a.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity to CIPD payoff - First Simulation.pdf}
+	    \caption{13th Simulation - Sensitivity to CIPD payoff - First Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{14th Simulation - Sensitivity to CIPD payoff - Second Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig10b.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity to CIPD payoff - Second Simulation.pdf}
+	    \caption{14th Simulation - Sensitivity to CIPD payoff - Second Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{15th Simulation - Sensitivity to repartition computation method - First Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.49\textwidth]{RefPaperFigures/fig11a.jpeg}
+		\includegraphics[width=0.49\textwidth]{RefPaperFigures/fig11a.jpeg}\par\vspace{0.5em}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity to repartition computation method - First Simulation.pdf}
+	    \caption{15th Simulation - Sensitivity to repartition computation method - First Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{16th Simulation - Sensitivity to repartition computation method - Second Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig12a.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity to repartition computation method - Second Simulation.pdf}
+	    \caption{16th Simulation - Sensitivity to repartition computation method - Second Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \subsubsection{17th Simulation - Sensitivity to repartition computation method - Third Simulation}
-
+	\begin{figure}[h]
+	    \centering
+		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig12b.jpeg}\par\vspace{0.5em}
+	    \includegraphics[width=0.7\textwidth]{Sensitivity to repartition computation method - Third Simulation.pdf}
+	    \caption{17th Simulation - Sensitivity to repartition computation method - Third Simulation}
+	    \label{fig:Monotonous Convergence}
+	\end{figure}
 \clearpage
 \section{Imitation Dynamics}
 Η δεύτερη εξελικτική δυναμική που θα παρουσιαστεί είναι αυτή των Imitation Dynamics - δυναμική μίμησης. Στην περίπτωση αυτή, δεν υπολογίζεται η νέα κατανομή του πληθυσμού αυστηρά ως συνάρτηση του fitness της κάθε στρατηγικής για κάθε γενιά, αλλά υιοθετείται μία πιο απλή και ίσως πιο εφαρμόσιμη στην πραγματικότητα λογική: σε κάθε γενιά, βρίσκουμε τη στρατηγική (ή σε περίπτωση ισοπαλίας τις στρατηγικές) που ανταποκρίθηκαν καλύτερα. Έπειτα, έχοντας ορίσει τον αριθμό K των παικτών που αλλάζουν στρατηγική ανά γενιά, επιλέγονται τυχαία K παίκτες μη βέλτιστης στρατηγικής και υιοθετούν μία εκ των βέλτιστων στρατηγικών, πάλι τυχαία, σε περίπτωση ισοβαθμίας. 
