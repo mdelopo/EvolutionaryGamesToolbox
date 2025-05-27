@@ -1,5 +1,5 @@
 function [POP,BST,FIT] = TourTheFit(B,Strategies,POP0,T,J)
-% addpath('./strategies/');
+
 funList = cellfun(@str2func,Strategies,'uniformOutput',false);
 N_strat = length(Strategies);
 payoff = zeros(N_strat);
