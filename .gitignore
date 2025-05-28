@@ -2,3 +2,7 @@
 *.asv
 *.log
 
+*.aux
+*.out
+*.lof
+*.toc
