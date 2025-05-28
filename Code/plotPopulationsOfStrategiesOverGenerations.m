@@ -16,6 +16,7 @@ end
 % Add labels and legend
 subtitle('TourTheFit')
 grid on;
+xlim([1 size(POP1,1)])
 
 nexttile
 % Plot each strategy
@@ -25,6 +26,7 @@ end
 % Add labels and legend
 subtitle('TourSimFit - without compensation')
 grid on;
+xlim([1 size(POP1,1)])
 
 nexttile
 % Plot each strategy
@@ -34,6 +36,7 @@ end
 % Add labels and legend
 subtitle('TourSimFit - with compensation')
 grid on;
+xlim([1 size(POP1,1)])
 
 t=title(fig,Title);
 subtitle(fig,'Populations of Strategies Over Generations');
