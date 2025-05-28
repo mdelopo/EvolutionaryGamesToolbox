@@ -305,7 +305,7 @@ B = \begin{bmatrix} 3 & 0 \\ 4.72 & 1 \end{bmatrix}
 	    \label{fig:Increasing oscillations}
 	\end{figure}
 \subsubsection{6th Simulation - Chaos/Disordered oscillations}
-The last case presented in the paper is that of disordered oscillations (Figure~\ref{fig:Disordered oscillations}). The authors of the paper rightly hesitate to characterize it as a truly chaotic case because, due to the discrete nature of the simulation, any such behavior after a sufficient number of generations either reaches equilibrium or simply repeats. However, the results of this particular simulation appear quite chaotic to the eye. Again, the case of \texttt{TourSimFit} without \texttt{compensation} fully matches the results of the paper. In contrast, due to the sensitivity of the phenomenon, the cases of the theoretical analysis and the actual simulation with \texttt{compensation} differ significantly, as they do not exhibit the chaotic behavior around generation 140 as in the case of the paper. Nevertheless, they predict the survival of the \texttt{per\_ccccd} and \texttt{Prober} strategies, as well as the values toward which the populations in the \texttt{TourSimFit} case without simulation seem to tend. Run example06 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+The last case presented in the paper is that of disordered oscillations (Figure~\ref{fig:Disordered oscillations}). The authors of the paper rightly hesitate to characterize it as a truly chaotic case because, due to the discrete nature of the simulation, any such behavior after a sufficient number of generations either reaches equilibrium or simply repeats. However, the results of this particular simulation appear quite chaotic. Again, the case of \texttt{TourSimFit} without \texttt{compensation} fully matches the results of the paper. In contrast, due to the sensitivity of the phenomenon, the cases of the theoretical analysis and the actual simulation with \texttt{compensation} differ significantly, as they do not exhibit the chaotic behavior around generation 140 as in the case of the paper. Nevertheless, they predict the survival of the \texttt{per\_ccccd} and \texttt{Prober} strategies, as well as the values toward which the populations in the \texttt{TourSimFit} case without simulation seem to tend. Run example06 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
 	    \centering
@@ -316,6 +316,8 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	\end{figure}
 
 \subsubsection{7th Simulation - Sensitivity of dynamics to population's size - First Simulation}
+From now on, the simulations showcase the sensitivity of the results to the initial conditions of the examples. Again, the results presented are compared to the results of Mathieu et al and any differences are discussed. The first simulation aims to present the sensitivity of the dynamics to the initial population's size for each strategy. More specifically, the same set of strategies can lead to many different forms of dynamics occuring, depending on the population of each of the strategy. This should not come as a surprise, as even in the previous examples the strategies used were often the same, with the differences in dynamics being caused by different initial populations. In this first example (Figure~\ref{fig:Sensitivity of dynamics to population's size - First Simulation}), the result is a periodic movement, which is also recreated in the TourSimFit without compensation, as well as (mostly) in the TourSimFit with compensation. However, the theoretical result of TourTheFit is an attenuated oscillation, as in the case of the Figure~\ref{fig:Periodic movements}, for the same reasons as before. Run example07 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig7a.jpeg}\par\vspace{0.5em}
@@ -324,6 +326,8 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity of dynamics to population's size - First Simulation}
 	\end{figure}
 \subsubsection{8th Simulation - Sensitivity of dynamics to population's size - Second Simulation}
+The second example of the showcase of the sensitivity of the dynamics to the population's size shows a monotonous convergence that is caused by a slight differentiation in the initial population vector of the previous simulation. The only difference between this simulation and the previous one is one extra \texttt{per\_ddc} added, which ends up being enough to change the resulting dynamics completely. This is recreated (Figure~\ref{fig:Sensitivity of dynamics to population's size - Second Simulation}) in the case of TourSimFit without compensation. However, in the cases of TourTheFit there appears to still be a slight attenuated oscillation, meaning the convergence is not monotonous, and in the case of the TourSimFit with compensation the result is still a periodic movement, obviously caused by the random element of this method. Thus, we observe a large sensitivity of the dynamics to the repartition method of the population, which is also discussed in a later example. Run example08 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig7b.jpeg}\par\vspace{0.5em}
@@ -332,6 +336,7 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity of dynamics to population's size - Second Simulation}
 	\end{figure}
 \subsubsection{9th Simulation - Sensitivity of winner to population's size - First Simulation}
+The second case presented is the sensitivity of the winner to the population's size, with winner being the strategy that ends up having the most members of the population at the end of the simulation. This may not be obvious at first; we have seen a lot of cases where the change in dynamics is clearly visible but the ensuing winner still remains the same in most cases. The first example (Figure~\ref{fig:Sensitivity of winner to population's size - First Simulation}) shows an initial population that ultimately announces \texttt{per\_ddc} as the winning strategy; the winner is recreated by each of our own methods, however the dynamics in the case of TourTheFit are visibly different, due to the population of \texttt{soft\_majo} never actually dying out and thus making the \texttt{Alternator} strategy more viable (as we covered, \texttt{Alternator} is the perfect counter to \texttt{soft\_majo}). Run example09 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig8a.jpeg}\par\vspace{0.5em}
@@ -340,6 +345,7 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity of winner to population's size - First Simulation}
 	\end{figure}
 \subsubsection{10th Simulation - Sensitivity of winner to population's size - Second Simulation}
+The second part of the sensitivity of winner to population's size showcase adds one \texttt{soft\_majo} participant to the initial population, making \texttt{Alternator} the winner. The results (Figure~\ref{fig:Sensitivity of winner to population's size - Second Simulation}) are recreated in the case of TourSimFit without compensation. However, in the cases of TourTheFit and TourSimFit with compensation, \texttt{Alternator} does not seem to be the decisive winner of the simulation, since at the end of the simulation there is still a rising population of \texttt{per\_ddc}, strategy which does better versus \texttt{Alternator}, meaning that the eventual winner would be \texttt{per\_ddc}. This in turn is caused by the fact that the population of \texttt{per\_ddc} is not eliminated in these two cases, thus making a comeback possible. Note that, as Mathieu et al suggest, the modified strategy never wins (unless if it was already the winner). Run example10 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig8b.jpeg}\par\vspace{0.5em}
@@ -348,6 +354,7 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity of winner to population's size - Second Simulation}
 	\end{figure}
 \subsubsection{11th Simulation - Sensitivity to game length - First Simulation}
+The next aspect of initial conditions studied is the game length, meaning the number of rounds each match between two players lasts. As it turns out, periodic strategies like most studied in this project are sensitive to the game length, because of the varying ``winner'' of each match based on the amount of rounds played. In the first part, each match lasts 7 rounds and the result is a periodic movement. This is also recreated (Figure~\ref{fig:Sensitivity to game length - First Simulation}) in the case of TourSimFit without compensation, but it again becomes an attenuated oscillatory movement for the cases of TourTheFit and TourSimFit with compensation, for the same reasons as discussed multiple times (a true periodic movement without making rounding errors in some generations is very sensitive). Run example11 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig9a.jpeg}\par\vspace{0.5em}
@@ -356,6 +363,7 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity to game length - First Simulation}
 	\end{figure}
 \subsubsection{12th Simulation - Sensitivity to game length - Second Simulation}
+The second simulation of this part changes only the number of rounds played each match to 6. This results in an attenuated oscillatory movement, which is recreated (Figure~\ref{fig:Sensitivity to game length - Second Simulation}) by every function of our own. Thus, it is shown that the dynamics, as well as the eventual winner (since a periodic movement like the one showcased in the previous example has no official winner) are sensitive to the game length, especially when periodic strategies are used. This happens because, for example, in a 6 round game \texttt{per\_ccd} does not lose as hard to \texttt{per\_ddc} as in the case of a 7 round game (it suffers one less ``effective'' defection, meaning an opponent defection met with cooperation). These slight modifications to the score of each match change the fitness score of each strategy enough to create visible changes to the outcome. Run example12 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig9b.jpeg}\par\vspace{0.5em}
@@ -364,6 +372,11 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity to game length - Second Simulation}
 	\end{figure}
 \subsubsection{13th Simulation - Sensitivity to CIPD payoff - First Simulation}
+One other initial condition of the simulation that affects the results greatly is the CIPD payoff, meaning the payoff matrix $B$. This should not come as a surprise; the fitness of each strategy is calculated based on the scores of each match, which in turn is calculated by the payoff matrix. We have also seen in a previous example (Figure~\ref{fig:Increasing oscillations}) how even a slight change to a single element of the payoff matrix can lead to different ensuing dynamics. In the first simulation, the payoff matrix 
+\[
+B = \begin{bmatrix} 3 & 0 \\ 4.6 & 1 \end{bmatrix}
+\] 
+is chosen, resulting in increasing oscillations. This is recreated (Figure~\ref{fig:Sensitivity to CIPD payoff - First Simulation}) by all three of the functions, with a slight difference in the cases of TourTheFit and TourSimFit with compensation being that the oscillation ends quicker, as all the members of the population end up using the \texttt{per\_ccd} strategy. Run example13 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig10a.jpeg}\par\vspace{0.5em}
@@ -372,6 +385,11 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity to CIPD payoff - First Simulation}
 	\end{figure}
 \subsubsection{14th Simulation - Sensitivity to CIPD payoff - Second Simulation}
+In the second part of the comparison the payoff matrix is changed slightly to
+\[
+B = \begin{bmatrix} 3 & 0 \\ 4.7 & 1 \end{bmatrix}
+\] 
+resulting in periodic movements. This behavior is also presented by all functions (Figure~\ref{fig:Sensitivity to CIPD payoff - Second Simulation}), thus showing that the payoff matrix is capable of changing the resulting dynamics even with a minor adjustment. Run example14 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig10b.jpeg}\par\vspace{0.5em}
@@ -380,6 +398,7 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity to CIPD payoff - Second Simulation}
 	\end{figure}
 \subsubsection{15th Simulation - Sensitivity to repartition computation method - First Simulation}
+The last aspect of the simulation that is capable of producing vastly different results if altered is the repartition computation method of the simulation, meaning the way the population of the next generation is calculated. This should already be clear, since the functions of the project already have showcased different results in multiple simulations. To start, Mathieu et al calculate the population of the next generation both by rounding to the lower integer and by keeping the float number calculated (thus creating the TourTheFit function). The results are presented in Figure~\ref{fig:Sensitivity to repartition computation method - First Simulation}; the results of the plots by Mathieu et al match the results of TourSimFit with compensation and TourTheFit accordingly. Note that TourSimFit with compensation creates a similar periodic movement to the case without compensation. Also note that both plots presented by Mathieu et al are given in the same figure this time. This happens because the difference being showcased is essentially the difference between TourTheFit and TourSimFit, which we present neatly with our Figure. Run example15 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.49\textwidth]{RefPaperFigures/fig11a.jpeg}
@@ -389,6 +408,7 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity to repartition computation method - First Simulation}
 	\end{figure}
 \subsubsection{16th Simulation - Sensitivity to repartition computation method - Second Simulation}
+This final pair of simulations again showcases the sensitivity to the repartition computation method, this time by keeping the ratios between strategies constant but by changing the actual population each strategy initially has. The results (Figure~\ref{fig:Sensitivity to repartition computation method - Second Simulation}) are exactly the same in all cases, also matching the results by Mathieu et al. Run example16 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig12a.jpeg}\par\vspace{0.5em}
@@ -397,6 +417,7 @@ The last case presented in the paper is that of disordered oscillations (Figure~
 	    \label{fig:Sensitivity to repartition computation method - Second Simulation}
 	\end{figure}
 \subsubsection{17th Simulation - Sensitivity to repartition computation method - Third Simulation}
+Lastly, all initial populations of the previous simulation are divided by 10 (thus keeping the ratios of strategies constant). This results in an increasing oscillation in the paper by Mathieu et al. The figure created (Figure~\ref{fig:Sensitivity to repartition computation method - Third Simulation}) shows the same result in the case of TourSimFit wihout compensation, but in the other two cases the dynamics constructed remain attenuated oscillations. Thus, it is once again proven that the method used to calculate the population of the next generation is one of (if not the) most importants aspect in terms of how much the results may differ. Also, it is shown that the ratio between strategies is not always enough to determine the ensuing dynamics; in some cases, such as this, the dynamics are vastly different, just by changing the magnitudes of the populations, not their ratio (from attenuated to increasing oscillations). Run example17 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	    \centering
 		\includegraphics[width=0.7\textwidth]{RefPaperFigures/fig12b.jpeg}\par\vspace{0.5em}
