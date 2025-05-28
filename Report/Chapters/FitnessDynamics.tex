@@ -290,3 +290,20 @@ Lastly, all initial populations of the previous simulation are divided by 10 (th
 	    \caption{17th Simulation - Sensitivity to repartition computation method - Third Simulation}
 	    \label{fig:Sensitivity to repartition computation method - Third Simulation}
 	\end{figure}
+\subsection{Discussion}
+
+From the above, the following final conclusions emerge regarding the evolutionary \textit{Fitness Dynamics}:
+
+\begin{enumerate}
+    \item Mathieu et al.\ appear to have used a simple floor function when calculating new populations after each generation, as this method yielded results closest to ours.
+
+    \item In many cases of generally unstable behaviors, the diagrams differ to an observable degree depending on whether the function \texttt{TourTheFit} or the function \texttt{TourSimFit} is used, with or without compensation. This is due to the fact that many of the resulting diagrams are highly sensitive, and even a small change in the dynamics logic can significantly alter the results.
+
+    \item The resulting diagram depends on the initial population values, the strategies used, and the payoff matrix. Even if two of these factors remain the same, a change in one of them can lead to drastically different results (even different rankings, as seen in Figure~\ref{fig:Increasing oscillations}).
+
+    \item Assigning the remaining population members randomly according to the logic of compensation seems to be a good choice, especially given its simplicity, as it does not significantly alter the results (strategies that theoretically die out actually do die out; in general, the population tendencies do not change). Depending on the specific case being examined, it resembles either the \texttt{TourTheFit} case or the \texttt{TourSimFit} case without compensation.
+
+    \item In general, the discrete nature of the \texttt{TourSimFit} simulations, with or without compensation, leads over time either to recurring oscillations or convergence to certain final population values. Chaos cannot really be achieved; even in Figure~\ref{fig:Disordered oscillations}, the populations eventually converge to the values predicted by \texttt{TourTheFit}. However, this does not prevent us from generating the interesting results seen in the paper.
+    
+    \item The results depend on many factors including the game length, the payoff matrix, the initial population (both ratio and magnitude) and the repartition computation method.
+\end{enumerate}
