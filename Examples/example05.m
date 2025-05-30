@@ -1,8 +1,8 @@
 %% 4th case: Increasing oscillations
 clear; clc;
-B = [3 0; 4.72 1];
-Strategies = ["per_ccd", "per_ddc", "soft_majo"];
-POP0 = [300; 400; 200];
+B = [3 0; 5 1];
+Strategies = ["Alternator", "per_ddc", "soft_majo"];
+POP0 = [400; 300; 200];
 T = 1000;
 J = 450;
 [POP1] = TourTheFit(B, Strategies, POP0, T, J);
