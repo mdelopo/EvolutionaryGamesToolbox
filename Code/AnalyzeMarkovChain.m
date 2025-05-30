@@ -4,6 +4,7 @@ global figurepath
     %   P         - Transition matrix (NxN)
     %   POP0      - Initial population vector (1xS)
     %   Strategies- Cell array of strategy names {'AllD', 'AllC', 'TFT', ...}
+    %   Title     - Title for the plot
 
     N = size(P,1);              % Number of states
     visited = false(N,1);       % Visited states
