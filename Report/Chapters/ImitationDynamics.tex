@@ -12,7 +12,50 @@ The function that simulates the evolutionary tournament with imitation dynamics 
 \[
 [\text{POP}, \text{BST}] = \text{TourSimImi}(B, \text{Strategies}, \text{POP}_0, K, T, J, \text{mode}).
 \]
-The inputs and outputs of the function are similar to those of \texttt{TourSimFit}, with the additional argument \( K \), an integer value that specifies the number of players who change strategy per generation. The additional argument \texttt{mode} (the function runs with default value \texttt{"Individual"}) can take the values \texttt{"Individual"} and \texttt{"Total"}, and refers to the way in which the optimal strategy is selected: in the \texttt{"Individual"} case, the strategy of the best individual player is returned, while in the \texttt{"Total"} case, the strategy with the highest total score among the players using it is selected. The choice of mode yields significantly different results, as will be shown below.
+The inputs and outputs of the function are similar to those of \texttt{TourSimFit}, with the additional argument \( K \), an integer value that specifies the number of players who change strategy per generation. The additional argument \texttt{mode} (the function runs with default value \texttt{"Individual"}) can take the values \texttt{"Individual"} and \texttt{"Total"}, and refers to the way in which the optimal strategy is selected: in the \texttt{"Individual"} case, the strategy of the best individual player is returned, while in the \texttt{"Total"} case, the strategy with the highest total score among the players using it is selected. The choice of mode yields significantly different results, as will be shown below. This is a pseudocode representation (\ref{Update Population Based on Imitation Dynamics}) of the updatePopulation subfunction, that updates the population after each generation.
+
+\begin{algorithm}
+\caption{Update Population Based on Imitation Dynamics}
+\label{Update Population Based on Imitation Dynamics}
+\begin{algorithmic}[1]
+\STATE \textbf{function} \textsc{updatePopulation}$(\text{currentPop}, \text{bestStrategyIndices}, K, \text{numStrategies})$
+\STATE numBestStrategies $\leftarrow$ length(bestStrategyIndices)
+\STATE nonBestStrategyIndices $\leftarrow$ set difference of $\{1, \dots, \text{numStrategies}\}$ and bestStrategyIndices
+\STATE nonBestPopulation $\leftarrow$ sum of currentPop at nonBestStrategyIndices
+\STATE nextPop $\leftarrow$ currentPop
+\IF{nonBestPopulation $= 0$}
+    \STATE \textbf{return}
+\ENDIF
+\STATE actualK $\leftarrow$ min$(K, \text{nonBestPopulation})$
+\IF{actualK $= 0$}
+    \STATE \textbf{return}
+\ENDIF
+\STATE agentPool $\leftarrow$ empty list
+\FOR{each $i$ in nonBestStrategyIndices}
+    \IF{currentPop[$i$] $>$ 0}
+        \STATE Append $i$ to agentPool currentPop[$i$] times
+    \ENDIF
+\ENDFOR
+\IF{agentPool is not empty}
+    \STATE Shuffle agentPool randomly
+    \STATE selectedAgents $\leftarrow$ first actualK elements of agentPool
+    \STATE selectedCounts $\leftarrow$ zero vector of length numStrategies
+    \FOR{each $i$ in selectedAgents}
+        \STATE selectedCounts[$i$] $\leftarrow$ selectedCounts[$i$] $+ 1$
+    \ENDFOR
+    \FOR{each $i$ in nonBestStrategyIndices}
+        \IF{selectedCounts[$i$] $>$ 0}
+            \STATE nextPop[$i$] $\leftarrow$ nextPop[$i$] $-$ selectedCounts[$i$]
+            \FOR{$j = 1$ to selectedCounts[$i$]}
+                \STATE bestIdx $\leftarrow$ random element from bestStrategyIndices
+                \STATE nextPop[bestIdx] $\leftarrow$ nextPop[bestIdx] $+ 1$
+            \ENDFOR
+        \ENDIF
+    \ENDFOR
+\ENDIF
+\STATE \textbf{return} nextPop
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{The function TourTheImi}
 The \texttt{TourTheImi} function has the form
@@ -29,13 +72,53 @@ and so on. Depending on the \texttt{mode} argument, we expect the transition mat
 \[
 \begin{bmatrix} 0 & 5 & 4 \end{bmatrix}
 \]
-to be absorbing, since there are no non-optimal players, and therefore it should have only one transition — to itself — with probability 1. In contrast, in the \texttt{"Total"} mode, this state would not be absorbing, as the \texttt{All\_C} strategy accumulates more total points.
+to be absorbing, since there are no non-optimal players, and therefore it should have only one transition — to itself — with probability 1. In contrast, in the \texttt{"Total"} mode, this state would not be absorbing, as the \texttt{All\_C} strategy accumulates more total points. Below is the pseudocode (\ref{Enumerate Transitions by Choosing actualK Agents from Non-Best Strategies}) for enumerating the possible transitions from each state.
+
+\begin{algorithm}
+\caption{Enumerate Transitions by Choosing actualK Agents from Non-Best Strategies}
+\label{Enumerate Transitions by Choosing actualK Agents from Non-Best Strategies}
+\begin{algorithmic}[1]
+\STATE agentPool $\leftarrow$ empty list
+\FOR{each $i$ in nonBestStrats}
+    \STATE Append $i$ to agentPool currPop[$i$] times
+\ENDFOR
+\STATE combos $\leftarrow$ all combinations of actualK indices from 1 to length(agentPool)
+\FOR{$c = 1$ to number of rows in combos}
+    \STATE selected $\leftarrow$ agentPool at indices combos[$c$]
+    \STATE nextPop $\leftarrow$ currPop
+    \FOR{$idx = 1$ to length of selected}
+        \STATE from $\leftarrow$ selected[$idx$]
+        \STATE to $\leftarrow$ random element from bestStrats
+        \STATE nextPop[from] $\leftarrow$ nextPop[from] $- 1$
+        \STATE nextPop[to] $\leftarrow$ nextPop[to] $+ 1$
+    \ENDFOR
+    \STATE key $\leftarrow$ string representation of nextPop
+    \IF{key exists in transitionCounts}
+        \STATE transitionCounts[key] $\leftarrow$ transitionCounts[key] $+ 1$
+    \ELSE
+        \STATE transitionCounts[key] $\leftarrow$ 1
+    \ENDIF
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 Another function is also created:
 \[
 \text{AnalyzeMarkovChain}(P, \text{POP}_0, \text{Strategies}, \text{Title}),
 \]
 which is responsible for generating the state transition diagrams shown below. This function, based on the matrix \( P \) calculated by the \texttt{TourTheImi} function and the initial population \texttt{POP0}, classifies the states into transient, absorbing, and the initial state. It also further distinguishes between reachable and unreachable states based on the initial state. It generates a diagram of each state, where the state type is indicated with color, the population of each strategy is shown, the strategy names are labeled (as given by the \texttt{Strategies} argument), and the corresponding transition probabilities are displayed above each transition. The \texttt{Title} argument is the title of the resulting diagram.
+
+Another function for the generation of state transition graphs is the following:
+\[
+\texttt{PlotStateTransitionGraph}(P, \text{POP}_0, \text{Strategies}, \text{Title}),
+\]
+which is responsible for visualizing the state transition dynamics of the Markov process. This function takes as input the transition matrix \( P \), the initial population vector \texttt{POP0}, and a cell array of strategy names (\texttt{Strategies}) to generate a directed graph that represents the transitions between population states.
+
+The full state space is constructed using the total population and number of strategies, and the function computes the long-run behavior of the system by raising the transition matrix to a high power (\( P^{100} \)). Specific reference states, such as full adoption of individual strategies, are identified, and the long-run probabilities of reaching these states from all other states are extracted and normalized.
+
+These normalized values are then used to color the nodes in the graph, indicating their asymptotic convergence tendencies. The graph layout is based on a 2D projection of the state space, where the x-axis and y-axis represent the populations of specific strategies (e.g., All\_D and Grim), allowing for intuitive interpretation of the state distribution.
+
+The graph is created using MATLAB's \texttt{digraph} object, with self-loops removed to improve clarity. The resulting figure is formatted to fit within an A4 landscape layout and is exported as a vector-based PDF using the specified \texttt{Title} as the filename.
 
 \subsection{Simulations - Examples}
 Below are some simulations generated by the functions described above, which are of interest. Each simulation is located in a specific example file in the Examples folder and by running the files properly, the exact results presented below are produced.
@@ -108,51 +191,59 @@ The second subgraph includes the absorbing state where ``All\_D'' dominates ($\b
 
 Finally, the third subgraph includes the absorbing state where ``All\_C'' dominates ($\begin{bmatrix}0 & 10 & 0\end{bmatrix}$), which is also unreachable, as are all the transitional states in this subgraph, for the same reason. 
 
-\subsubsection{4th Simulation - Sensitivity of Imitation Dynamics, mode='Individual', to population's size - Case N=3}
+\subsubsection{4th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to population's size - Case N=3}
 For the next four simulations, the sensitivity of the imitation dynamics in the case of ``Individual'' mode to the total population's size is discussed. For all following simulations, the population consists of members of the following three strategies: \texttt{All\_C}, \texttt{All\_D} and \texttt{Grim} (which in this case is an equivalent strategy to \texttt{TitForTat}). Another important aspect to discuss is the form of the plots produced; a new function PlotStateTransitionGraph is used in order to plot the possible states of the Markov Chain in a triangular form. More specifically, the x-axis of the plot refers to the population of \texttt{All\_D}, the y-axis represents the population of \texttt{Grim} and, since the total population $N$ remains constant, the population of \texttt{All\_C} increases as we move towards the bottom-left of the plot. 
 
 The analysis begins with the simple case of $N=3$. This is the proper instance to comment on the colors of the vertices; the color is produced by calculating the final state probability matrix (by raising the calculated matrix $P$ to a sufficiently large power). The more red a vertex appears, the more likely this population distribution is to lead to the domination of \texttt{All\_D}. The more blue it appears, the more likely it is to lead to the domination of \texttt{Grim}. Lastly, the more green it is, the more likely it is to lead to \texttt{All\_C} domination. You may also notice a few black vertices; these are caused by the fact that for some population distributions (as we also saw earlier) the transition to total dominating states like the ones described above is impossible; with the current dynamics, for example, in a population of only \texttt{All\_C} and \texttt{Grim}, no changes happen to the strategy distribution, meaning the state is also absorbing (if the simulation starts there, it ends there).
 
 We begin to notice a trend in the case $N=3$; only one vertex is green, the vertex where all 3 players follow the \texttt{All\_C} strategy. States in the far left side of the plot are, as discussed earlier, black, except for the one on the top, which is blue (all 3 players follow the \texttt{Grim} strategy). Lastly, there is a distinction between states that lead to \texttt{All\_D} domination and states that lead to \texttt{Grim} domination, with no states possibly leading to both; thus, in the case $N=3$ the winning strategy is deterministic to the initial population. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to population's size}, subfigure (a). Run example18 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{5th Simulation - Sensitivity of Imitation Dynamics, mode='Individual', to population's size - Case N=5}
+\subsubsection{5th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to population's size - Case N=5}
 In the next simulation, the total population is increased to 5. It is expected that the overall trend will continue, but with the increase in population we at some point expect to see states that may lead to both \texttt{All\_D} domination and states that lead to \texttt{Grim} domination. That is precisely the case; as we can see by the colors of the vertices and by the edges added to the graph, states 9 and 13 both have this property. It should also be noted that state 8 may possibly lead to state 7 as well as the expected state 1, the domination of \texttt{Grim} state. This happens because the non-best strategies of this state are \texttt{All\_D} and \texttt{All\_C}; using $K=1$, as in this example, it is random whether the defector or the cooperator switch strategies first, and thus it is random whether the \texttt{Grim} strategy totally dominates. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to population's size}, subfigure (b). Run example19 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{6th Simulation - Sensitivity of Imitation Dynamics, mode='Individual', to population's size - Case N=10}
+\subsubsection{6th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to population's size - Case N=10}
 As the population keeps increasing, as in the case of this simulation, where the total population is increased to 10, we expect the results to change as before; more states are going to possibly lead to both \texttt{All\_D} domination and states that lead to \texttt{Grim} domination. Also, the higher and to the right of the plot, the more likely \texttt{Grim} domination is to occur. The expected results are the ones also reproduced in the Figure. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to population's size}, subfigure (c). Run example20 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{7th Simulation - Sensitivity of Imitation Dynamics, mode='Individual', to population's size - Case N=100}
-Lastly, one final large increase to the population to $N=100$ is made, which aims to showcase a more continuous form of the graph; in this case, the exact possible transitions of each state are not visible, however the colors of the vertices ``paint'' (pun intended) a complete picture of the situation. More specifically, it is made clear where the states that lead to each possible final state reside inside the graph. This generalizes the concept presented thus far; a red triangle in the bottom left of states that lead to \texttt{All\_D} domination, a blue triangle in the top right of states that lead to \texttt{Grim} domination, a purple line of states possibly leading to both separating the two, a green vertex in the bottom left representing the \texttt{All\_C} domination (from the start) and a black line in the left representing possible absorbing states different from the ones with a single strategy alive. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to population's size}, subfigure (d). Run example21 of the Examples folder (after reading Quickstart guide) to recreate the figure.
+\subsubsection{7th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to population's size - Case N=100}
+Lastly, one final large increase to the population to $N=100$ is made, which aims to showcase a more continuous form of the graph; in this case, the exact possible transitions of each state are not visible, however the colors of the vertices ``paint'' (pun intended) a complete picture of the situation. More specifically, it is made clear where the states that lead to each possible final state reside inside the graph. This generalizes the concept presented thus far; a red triangle in the bottom left of states that lead to \texttt{All\_D} domination, a blue triangle in the top right of states that lead to \texttt{Grim} domination, a purple line of states possibly leading to both separating the two, a green vertex in the bottom left representing the \texttt{All\_C} domination (from the start) and a black line in the left representing possible absorbing states different from the ones with a single strategy alive. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to population's size}, subfigure (d). Run example21 of the Examples folder (after reading Quickstart guide) to recreate the figure. Also note that this specific example, because of the lack of optimization, is extremely slow to run.
 
-\subsubsection{8th Simulation - Sensitivity of Imitation Dynamics, mode='Individual', to payoff matrix - Case a=3.2}
+\subsubsection{8th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to payoff matrix - Case a=3.2}
 For all previous 4 simulations, the payoff matrix was regarded to be constant and equal to $B = \begin{bmatrix} 3 & 1 \\ 4 & 2 \end{bmatrix}$. As discussed during the analysis of the Fitness Dynamics, the payoff matrix can drastically change the results of a simulation. Thus, for the next 4 simulations, the total population is kept constant $N=10$ and the payoff matrix is changed with the forms $B = \begin{bmatrix} a & 1 \\ 4 & 2 \end{bmatrix}$, with $a \in [3,4)$. This means that the payoff of the cooperation-cooperation result will be increased and the results will be observed. It is expected that such an increase will eventually lead to more strategies leading to the domination of the nice strategies (i.e. \texttt{Grim} domination). 
 
 The analysis begins with the case $a = 3.2$. The result, as expected, is similar to the case of $a=3$ which was indirectly presented in the 6th Simulation, with only a few more strategies leading to \texttt{Grim} domination. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to payoff matrix}, subfigure (a). Run example22 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{9th Simulation - Sensitivity of Imitation Dynamics, mode='Individual', to payoff matrix - Case a=3.4}
+\subsubsection{9th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to payoff matrix - Case a=3.4}
 The payoff is increased to $a=3.4$, with the overall effect of the increase becoming more visible. The blue triangle in the top right is expanding towards the bottom left, meaning that even in the cases with a lot of initial \texttt{All\_C} members, because the cooperation payoff is increased a lot, it is easier for the \texttt{Grim} strategy to become the most viable. Thus, the general trend is for the blue triangle to approach the bottom left of the plot. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to payoff matrix}, subfigure (b). Run example23 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{10th Simulation - Sensitivity of Imitation Dynamics, mode='Individual', to payoff matrix - Case a=3.6}
+\subsubsection{10th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to payoff matrix - Case a=3.6}
 The further increase to $a=3.6$ further increases the blue vertices in the way discussed above. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to payoff matrix}, subfigure (c). Run example24 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{11th Simulation - Sensitivity of Imitation Dynamics, mode='Individual', to payoff matrix - Case a=3.8}
+\subsubsection{11th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to payoff matrix - Case a=3.8}
 Lastly, with the increase to $a=3.8$, the blue triangle becomes a right triangle, meaning the only red states are the ones in the complete bottom of the plot, no longer forming a triangle. It should also be noted that there are no more purple states; the result once again becomes deterministic. It should come as no surprise that there still exist red states; the first line represents an initial population of only \texttt{All\_C} and \texttt{All\_D}, clearly making \texttt{All\_D} the better strategy and leading to red coloring. The line above that corresponds to a single \texttt{Grim} participant in the initial population. The single \texttt{Grim} participant can only ever nearly tie with the \texttt{All\_D} members, and each \texttt{All\_D} member still gets more points from facing the \texttt{All\_C} members than the participant of \texttt{Grim} does, thus again making \texttt{All\_D} the best strategy. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Individual', to payoff matrix}, subfigure (d). Run example25 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{12th Simulation - Sensitivity of Imitation Dynamics, mode='Total', to population's size - Case N=3}
+\subsubsection{12th Simulation - Sensitivity of Imitation Dynamics, mode = 'Total', to population's size - Case N=3}
+For the next simulations, the ``Total'' mode for best strategy calculation is selected. The same analysis as before will occur, meaning we will first see the effect of increasing the total population of the simulation. In the case of ``Total'', the total number of absorbing states depends on the total population as well as the strategies themselves. For example, in the case $N=3$, if all 3 strategies used are nice, meaning there is never a defection, the state $[1 1 1]$ would be absorbing. Also, in the case we analyze with 2 nice strategy and a single naughty one, the state $[n n 0]$ would be absorbing, meaning that if the total population is an even number, there is one extra absorbing state. Otherwise, the absorbing states are the states of domination by all strategies. In the specific case of $N=3$, there is one extra absorbing state, the one with 1 person using \texttt{All\_D} and 2 people using \texttt{All\_C}; this is specific to the payoff matrix $\begin{bmatrix} 3 & 1 \\ 4 & 2 \end{bmatrix}$. The \texttt{All\_D} strategy gets $2 \cdot 4 \cdot T$ points, whereas the \texttt{All\_C} strategy gets $2 \cdot (1 \cdot T + 3 \cdot T)$, where $T$ is the number of rounds played per match, which are equal. Therefore, both strategies are best and the state is an absorbing one. Otherwise, the results are as expected: the plot is divided into areas starting from which domination of each strategy is eventually the result. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Total', to population's size}, subfigure (a). Run example26 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{13th Simulation - Sensitivity of Imitation Dynamics, mode='Total', to population's size - Case N=5}
+\subsubsection{13th Simulation - Sensitivity of Imitation Dynamics, mode = 'Total', to population's size - Case N=5}
+The population is increased to 5. Except for possible special absorbing states like the one in the previous case, we expect the graph to be similar to the previous one, just with more states leading to each absorbing state. This is indeed the case, and there are not any extra absorbing states to be observed. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Total', to population's size}, subfigure (b). Run example27 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{14th Simulation - Sensitivity of Imitation Dynamics, mode='Total', to population's size - Case N=10}
+\subsubsection{14th Simulation - Sensitivity of Imitation Dynamics, mode = 'Total', to population's size - Case N=10}
+The further increase makes the plot a little more interesting by adding the question: where does the area of each strategy end? Also notice state 46, which is the state with 5 \texttt{All\_C} and 5 \texttt{Grim}, matching the example mentioned previously. Overall, however, the plot is as expected. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Total', to population's size}, subfigure (c). Run example28 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{15th Simulation - Sensitivity of Imitation Dynamics, mode='Total', to population's size - Case N=100}
+\subsubsection{15th Simulation - Sensitivity of Imitation Dynamics, mode = 'Total', to population's size - Case N=100}
+Lastly, the population is increased to 100 to make the graph a ``continuous'' and to observe how each area of domination is defined. The areas for the specific payoff matrix has the form presented. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Total', to population's size}, subfigure (d). Run example29 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{16th Simulation - Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix - Case a=3.2}
+\subsubsection{16th Simulation - Sensitivity of Imitation Dynamics, mode = 'Total', to payoff matrix - Case a=3.2}
+The last set of simulations presents the sensitivity to the payoff matrix, in terms of the ``Total'' mode for best strategy calculation. As in the case of the ``Individual'' mode, the payoff matrix has form $B = \begin{bmatrix} a & 1 \\ 4 & 2 \end{bmatrix}$, with $a \in [3,4)$. As $a$ is increased, it is expected that the blue and green areas (which represent the states that end in domination of a nice strategy, meaning strategies that tend to cooperate) will increase, whereas the red area corresponding to \texttt{All\_D} domination will shrink. For this first increase to $a=3.2$, the change is not visible. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix}, subfigure (a). Run example30 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{17th Simulation - Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix - Case a=3.4}
+\subsubsection{17th Simulation - Sensitivity of Imitation Dynamics, mode = 'Total', to payoff matrix - Case a=3.4}
+For this simulation, $a$ is increased even further to 3.4. The only noticeable change is state 56, which changes from red to green. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix}, subfigure (b). Run example31 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{18th Simulation - Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix - Case a=3.6}
+\subsubsection{18th Simulation - Sensitivity of Imitation Dynamics, mode = 'Total', to payoff matrix - Case a=3.6}
+Next, $a$ is increased to 3.6, again without any noticeable changes. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix}, subfigure (c). Run example32 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
-\subsubsection{19th Simulation - Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix - Case a=3.8}
+\subsubsection{19th Simulation - Sensitivity of Imitation Dynamics, mode = 'Total', to payoff matrix - Case a=3.8}
+Lastly, $a$ is changed to 3.8, with again very few specific changes, state 50 goes from red to green and state 17 changes from red to blue. In general, the expected trend is followed. However, it is followed to a much smaller degree than expected; throughout the change only 3 states ever changed color. Thus, we deduce that the total size of the population of each strategy is much more impactful on the end result than the payoff matrix, at least with the specific range of $a$. This happens because the best strategy is calculated by the total score of all people using that specific strategy, meaning that the number of people of the strategy is crucial. Overall, because of this element of the ``Total'' mode, along with the fact that we did not find any cases where the outcome is non-deterministic, we find it less interesting than the ``Individual'' mode. The result can be seen in Figure \ref{fig:Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix}, subfigure (d). Run example33 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 	\begin{figure}[h]
 	      \centering
 	      \includegraphics[width=0.95\textwidth]{Testing Total mode for best strategy calculation}
@@ -282,3 +373,15 @@ Lastly, with the increase to $a=3.8$, the blue triangle becomes a right triangle
 		\caption{Sensitivity of Imitation Dynamics (mode=``Total'') to payoff matrix parameter $a$ for $B = \begin{bmatrix} a & 1 \\ 4 & 2 \end{bmatrix}$ and $N=10$}
 		\label{fig:Sensitivity of Imitation Dynamics, mode='Total', to payoff matrix}
 	\end{figure}
+\subsection{Discussion}
+From the above, the following final conclusions emerge regarding the evolutionary \textit{Imitation Dynamics}:
+\begin{enumerate}
+    \item The choice of the specific dynamics followed when computing the populations of the next generation is crucial for the resulting outcomes. For example, selecting \( K \) players from the total population or \( K \) players from the non-optimal ones leads to very different results, both theoretically and in simulations.
+
+    \item The cases where the optimal strategy is computed using the \texttt{Individual} or \texttt{Total} methods also lead to drastically different outcomes regarding the nature of the resulting states, as shown in Simulations 2 and 3. In general, the \texttt{Total} method creates cohesive subgraphs that have as terminal states the domination of one of the strategies, while the \texttt{Individual} method creates a larger subgraph that leads to many possible terminal states and some isolated terminal states. The term ``cohesive'' is used here loosely, as we are dealing with directed graphs in which there are generally no paths in both directions, but the term serves as an informal description of the phenomenon.
+
+    \item Due to point (2), we observe that the final state is not always predictable from the initial one when using the \texttt{Individual} method. This is because the random assignment in each generation may give different strategies an advantage in the next generation, leading to variability in the outcomes. In contrast, the \texttt{Total} method is fully deterministic with respect to the initial and final state, and only the path followed between them contains randomness.
+
+    \item In every case, the populations produced by the \texttt{TourSimImi} function follow a certain sequence of changes, which is represented in the state transition diagram generated by the corresponding \texttt{TourTheImi} and \texttt{AnalyzeMarkovChain} or \texttt{PlotStateTransitionGraph}.
+\end{enumerate}
+
