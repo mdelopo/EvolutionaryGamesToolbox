@@ -56,6 +56,8 @@ function SC = PlotStateTransitionGraph(P, POP0, Strategies, Title)
     % h.EdgeFontSize = 5;
     grid on;
     title(Title);
+    xlabel('Population of All-D');
+    ylabel('Population of Grim');
     exportgraphics(fig,figurepath+Title+'.pdf','ContentType','vector')
 end
 
