@@ -1,4 +1,4 @@
-%% Example showcase of TourTheImi and AnalyzeMarkovChain
+%% Sensitivity of Imitation Dynamics, mode = 'Individual', to population's size - Case N=5                                                                                          
 clear; clc;
 B = [3 1; 4 2];
 Strategies = ["All_C", "All_D", "Grim"];

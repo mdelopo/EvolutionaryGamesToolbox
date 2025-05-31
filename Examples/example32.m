@@ -1,4 +1,4 @@
-%% Example showcase of TourTheImi and AnalyzeMarkovChain
+%% %% Sensitivity of Imitation Dynamics, mode = 'Total', to payoff matrix - Case a=3.6
 clear; clc;
 B = [3.6 1; 4 2];
 Strategies = ["All_C", "All_D", "Grim"];
