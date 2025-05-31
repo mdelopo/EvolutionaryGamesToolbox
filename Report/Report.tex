@@ -19,6 +19,8 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
+\usepackage[numbib]{tocbibind}
+
 % Set the page margins
 \geometry{a4paper,margin=2.54cm}
 
@@ -100,18 +102,18 @@
 \tableofcontents % Table of Contents
 
 \include{Chapters/Introduction} % Include the Introduction chapter
-\include{Chapters/Quickstart} % Include the Quickstart chapter
+\include{Chapters/QuickStart} % Include the Quickstart chapter
 \include{Chapters/FitnessDynamics} % Include the Fitness Dynamics chapter
 \include{Chapters/ImitationDynamics} % Include the Imitation Dynamics chapter
 \include{Chapters/Discussion} % Include the Discussion chapter
 
 \clearpage
-\section{References}
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{Chapters/References}
 
 \include{Chapters/Appendices} % Include the Appendices chapter
+
 \clearpage
-\listoffigures\addcontentsline{toc}{section}{List of Figures}
+\listoffigures
 \end{document}
