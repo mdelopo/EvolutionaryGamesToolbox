@@ -147,7 +147,7 @@ while in execution (b),
 \[
 \begin{bmatrix}1 & 5 & 3\end{bmatrix} \rightarrow^* \begin{bmatrix}0 & 0 & 9\end{bmatrix},
 \]
-which, as we analyzed above, are indeed the two most likely absorbing states.
+which, as we analyzed above, are indeed the two most likely absorbing states. Run example34 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
 		\centering
@@ -172,7 +172,7 @@ In the next two simulations, an attempt is made to demonstrate the difference in
 
 The result is similar to that of the first simulation \ref{fig:TourTheImi153}. With some observation, we can envision an imaginary curve connecting the vertices of the states $\begin{bmatrix}8 & 0 & 2\end{bmatrix}, \begin{bmatrix}6 & 1 & 3\end{bmatrix}, \begin{bmatrix}4 & 2 & 4\end{bmatrix}, \begin{bmatrix}2 & 3 & 5\end{bmatrix}$, which separates the basins of attraction of the cooperative and non-cooperative strategies. 
 
-If the system is in a state below this curve, it will end up in the absorbing state where ``All\_D'' dominates. Conversely, if it starts in a state above this curve, it will end up in one of the absorbing states of the cooperative strategies.
+If the system is in a state below this curve, it will end up in the absorbing state where ``All\_D'' dominates. Conversely, if it starts in a state above this curve, it will end up in one of the absorbing states of the cooperative strategies. Run example35 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 	\begin{figure}[h]
 	      \centering
@@ -189,7 +189,7 @@ The first subgraph, which includes the initial state, is the only one that conta
 
 The second subgraph includes the absorbing state where ``All\_D'' dominates ($\begin{bmatrix}10 & 0 & 0\end{bmatrix}$), but this state, as well as all the transitional states in this subgraph, are unreachable for the reason described above.
 
-Finally, the third subgraph includes the absorbing state where ``All\_C'' dominates ($\begin{bmatrix}0 & 10 & 0\end{bmatrix}$), which is also unreachable, as are all the transitional states in this subgraph, for the same reason. 
+Finally, the third subgraph includes the absorbing state where ``All\_C'' dominates ($\begin{bmatrix}0 & 10 & 0\end{bmatrix}$), which is also unreachable, as are all the transitional states in this subgraph, for the same reason. Run example36 of the Examples folder (after reading Quickstart guide) to recreate the figure.
 
 \subsubsection{4th Simulation - Sensitivity of Imitation Dynamics, mode = 'Individual', to population's size - Case N=3}
 For the next four simulations, the sensitivity of the imitation dynamics in the case of ``Individual'' mode to the total population's size is discussed. For all following simulations, the population consists of members of the following three strategies: \texttt{All\_C}, \texttt{All\_D} and \texttt{Grim} (which in this case is an equivalent strategy to \texttt{TitForTat}). Another important aspect to discuss is the form of the plots produced; a new function PlotStateTransitionGraph is used in order to plot the possible states of the Markov Chain in a triangular form. More specifically, the x-axis of the plot refers to the population of \texttt{All\_D}, the y-axis represents the population of \texttt{Grim} and, since the total population $N$ remains constant, the population of \texttt{All\_C} increases as we move towards the bottom-left of the plot. 
