@@ -1,4 +1,4 @@
-%% Example showcase of TourTheImi and AnalyzeMarkovChain
+%% Example showcase of TourTheImi, AnalyzeMarkovChain and TourSimImi
 clear; clc;
 B = [3 1; 4 2];
 Strategies = ["All_D", "All_C", "TitForTat"];
