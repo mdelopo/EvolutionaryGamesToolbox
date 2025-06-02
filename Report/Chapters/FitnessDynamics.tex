@@ -5,7 +5,7 @@ The first evolutionary dynamics to be analyzed (and the one studied by Mathieu e
 Suppose the population consists of 3 strategies, A, B, and C. Based on the game matrix $B$, the number of rounds per match $T$, and, of course, the strategies that face each other in each case, the payoffs for each of the two strategies are calculated and stored as, for example, $V(A|B)$, the payoff of strategy A when it faces strategy B. Then, the score for each player of generation $n$ using a given strategy (and thus, essentially, the score of the strategy itself) is calculated as, for example, for strategy A:
 
 \[
-g_n(A) = W_n(A)V(A|A) + W_n(B)V(A|B) + W_n(C)V(A|C) - V(A|A)
+g_n(A) = W_n(A)V(A|A) + W_n(B)V(A|B) + W_n(C)V(A|C) - V(A|A),
 \]
 
 where $W_n(A), W_n(B), W_n(C)$ are the population sizes of each strategy in generation $n$. (Note that the payoff for playing against one’s own strategy is subtracted once, because it is assumed that individuals do not play against themselves.)
@@ -19,10 +19,12 @@ t(n) = W_n(A)g_n(A) + W_n(B)g_n(B) + W_n(C)g_n(C)
 and the population in generation $n+1$ for strategy A becomes:
 
 \[
-W_{n+1}(A) = \frac{\Pi W_n(A)g_n(A)}{t(n)}
+W_{n+1}(A) = \frac{\Pi W_n(A)g_n(A)}{t(n)},
 \]
 
-It should be emphasized that this logic is applied due to the fully deterministic nature of the implemented strategies. If there were strategies with random elements, the theoretical calculation of the outcome of each match would be impossible, and one would instead need to compute some expected value---something that falls outside the scope of this study.
+where $\Pi$ is the total population.
+
+It should be emphasized that this logic is applied due to the fully deterministic nature of the implemented strategies. If there were strategies with random elements, the theoretical calculation of the outcome of each match would be impossible, and one would instead need to compute some expected value --- something that falls outside the scope of this study.
 \subsection{The function TourSimFit}
 The first function implemented is \texttt{[POP, BST, FIT] = TourSimFit(B, Strategies, POP0, T, J, compensation)}, where $B$ is the payoff matrix of the game, \texttt{Strategies} is an array of strings with the names of the strategies participating in the simulation, \texttt{POP0} is the initial population, $T$ is the number of rounds in each match, and $J$ is the number of generations of the evolutionary tournament. Additionally, \texttt{compensation} is an optional boolean argument (the function can be called without including it), whose function is described below. The function returns the following:
 
